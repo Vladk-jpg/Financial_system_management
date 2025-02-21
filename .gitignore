@@ -64,3 +64,13 @@ package-lock.json
 .eslintcache
 *v8.log
 /lib/
+dist/
+logs/
+*.log
+*.tmp
+*.swo
+.env
+.env.local
+.env.development
+.env.production
+coverage/
