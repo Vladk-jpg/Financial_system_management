@@ -1,8 +1,11 @@
 import { NestFactory } from '@nestjs/core';
-import { ServerModule } from './infrastructure/http/server.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ServerModule);
+  const app = await NestFactory.create(AppModule);
+  app.enableCors(); 
   await app.listen(3000);
+  console.log('🚀 Server started on http://localhost:3000');
 }
+
 bootstrap();
