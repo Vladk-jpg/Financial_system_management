@@ -74,3 +74,8 @@ logs/
 .env.development
 .env.production
 coverage/
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+

@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
-import { InMemoryUserRepository } from './repositories/user.repository.impl';
-import { USER_REPOSITORY } from 'src/shared/constants/constants';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { BankRepository } from './repositories/bank.repository.impl';
+import { BankEntity } from './entities/bank.entity';
+import { BANK_REPOSITORY } from 'src/domain/interfaces/bank.repository';
 
 @Module({
+    imports: [TypeOrmModule.forFeature([BankEntity])],
     providers: [
-      {
-        provide: USER_REPOSITORY,
-        useClass: InMemoryUserRepository,
-      },
+        {
+            provide: BANK_REPOSITORY,
+            useClass: BankRepository, // Здесь уже есть реализация
+        },
     ],
-    exports: [USER_REPOSITORY], 
-  })
-  export class DatabaseModule {}
+    exports: [BANK_REPOSITORY],
+})
+export class DatabaseModule {}

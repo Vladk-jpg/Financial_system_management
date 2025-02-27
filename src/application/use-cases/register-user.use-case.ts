@@ -1,7 +1,7 @@
-import { User, UserRole } from '../../../domain/entities/user.entity';
-import { IUserRepository } from '../../../domain/repositories/user.repository';
-import { CreateUserDTO } from '../../dto/create-user.dto';
-import { PasswordHasher } from '../../../shared/utils/password-hasher';
+import { User, UserRole } from '../../domain/entities/user';
+import { IUserRepository } from '../../domain/interfaces/user.repository';
+import { CreateUserDTO } from '../dto/create-user.dto';
+import { PasswordHasher } from '../../shared/utils/password-hasher';
 import { Injectable, Inject } from '@nestjs/common';
 import { USER_REPOSITORY } from 'src/shared/constants/constants'; 
 
