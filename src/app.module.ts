@@ -1,6 +1,6 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BankEntity } from './infrastructure/database/entities/bank.entity';
+import { BankModel } from './infrastructure/database/models/bank.model';
 import { BankController } from './api/bank/bank.controller';
 import { ApplicationModule } from './application/application.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
@@ -11,7 +11,7 @@ import { LoggingMiddleware } from './infrastructure/middleware/logging.middlewar
     TypeOrmModule.forRoot({
       type: 'sqlite',                    
       database: 'database.sqlite',      
-      entities: [BankEntity],          
+      entities: [BankModel],          
       synchronize: true,             
   }),
     DatabaseModule,

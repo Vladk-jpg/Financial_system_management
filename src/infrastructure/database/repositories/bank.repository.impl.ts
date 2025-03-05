@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IBankRepository } from 'src/domain/interfaces/bank.repository';
-import { BankEntity } from '../entities/bank.entity';
+import { BankModel } from '../models/bank.model';
 import { Bank } from 'src/domain/entities/bank';
 import { BankMapper } from '../mappers/bank.mapper';
 
 @Injectable()
 export class BankRepository implements IBankRepository {
   constructor(
-    @InjectRepository(BankEntity)
-    private readonly bankRepo: Repository<BankEntity>,
+    @InjectRepository(BankModel)
+    private readonly bankRepo: Repository<BankModel>,
   ) {}
 
-  async create(bank: Bank): Promise<BankEntity> {
-    const entity = BankMapper.toEntity(bank);
+  async create(bank: Bank): Promise<BankModel> {
+    const entity = BankMapper.toModel(bank);
     const savedEntity = await this.bankRepo.save(entity);
     return savedEntity;
   }
@@ -29,9 +29,11 @@ export class BankRepository implements IBankRepository {
     return entities.map(BankMapper.toDomain);
   }
 
-  async update(id: number, bank: Partial<Bank>): Promise<Bank> {
-    await this.bankRepo.update(id, bank);
-    return (await this.findById(id)) as Bank;
+  async update(id: number, bank: Bank): Promise<Bank | null> {
+    const entity = BankMapper.toModel(bank);
+    await this.bankRepo.update(id, entity);
+    const newBank = await this.findById(id);
+    return newBank ? newBank : null;
   }
 
   async delete(id: number): Promise<void> {

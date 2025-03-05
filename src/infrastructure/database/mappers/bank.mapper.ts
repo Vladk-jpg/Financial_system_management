@@ -1,13 +1,13 @@
 import { Bank } from 'src/domain/entities/bank';
-import { BankEntity } from '../entities/bank.entity';
+import { BankModel } from '../models/bank.model';
 
 export class BankMapper {
-  static toDomain(entity: BankEntity): Bank {
+  static toDomain(entity: BankModel): Bank {
     return new Bank(entity.name, entity.bic, entity.address);
   }
 
-  static toEntity(domain: Bank): BankEntity {
-    const entity = new BankEntity();
+  static toModel(domain: Bank): BankModel {
+    const entity = new BankModel();
     entity.name = domain.name;
     entity.bic = domain.bic;
     entity.address = domain.address;

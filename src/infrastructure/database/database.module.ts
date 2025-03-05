@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankRepository } from './repositories/bank.repository.impl';
-import { BankEntity } from './entities/bank.entity';
+import { BankModel } from './models/bank.model';
 import { BANK_REPOSITORY } from 'src/domain/interfaces/bank.repository';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([BankEntity])],
+    imports: [TypeOrmModule.forFeature([BankModel])],
     providers: [
         {
             provide: BANK_REPOSITORY,
-            useClass: BankRepository, // Здесь уже есть реализация
+            useClass: BankRepository, 
         },
     ],
     exports: [BANK_REPOSITORY],
