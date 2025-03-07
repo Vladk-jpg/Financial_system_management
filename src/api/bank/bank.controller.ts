@@ -1,8 +1,15 @@
-import { Controller, Post, Get, Put, Body, Delete, Param } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Put,
+  Body,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { CreateBankDTO } from 'src/application/dto/create-bank.dto';
 import { BankService } from 'src/application/services/bank.service';
 import { UpdateBankDTO } from 'src/application/dto/update-bank.dto';
-import { PARAMTYPES_METADATA } from '@nestjs/common/constants';
 
 @Controller('banks')
 export class BankController {
@@ -10,7 +17,11 @@ export class BankController {
 
   @Post('create')
   async createBank(@Body() dto: CreateBankDTO) {
-    return await this.bankService.createBank(dto);
+    try {
+      return await this.bankService.createBank(dto);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @Get(':id')
@@ -24,15 +35,12 @@ export class BankController {
   }
 
   @Put(':id')
-  async editBank(@Param('id') id: number, @Body() dto: UpdateBankDTO) 
-  {
+  async editBank(@Param('id') id: number, @Body() dto: UpdateBankDTO) {
     return await this.bankService.updateBank(id, dto);
   }
 
   @Delete(':id')
-  async deleteBank(@Param('id') id: number)
-  {
+  async deleteBank(@Param('id') id: number) {
     return await this.bankService.deleteBank(id);
   }
-
 }

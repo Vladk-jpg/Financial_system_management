@@ -13,14 +13,14 @@ export class BankRepository implements IBankRepository {
     private readonly bankRepo: Repository<BankModel>,
   ) {}
 
-  async create(bank: Bank): Promise<BankModel> {
+  async create(bank: Bank): Promise<Bank> {
     const entity = BankMapper.toModel(bank);
     const savedEntity = await this.bankRepo.save(entity);
     return savedEntity;
   }
 
   async findById(id: number): Promise<Bank | null> {
-    const entity = await this.bankRepo.findOne({ where: { id } });
+    const entity = await this.bankRepo.findOne({ where: { id: id } });
     return entity ? BankMapper.toDomain(entity) : null;
   }
 
@@ -29,14 +29,15 @@ export class BankRepository implements IBankRepository {
     return entities.map(BankMapper.toDomain);
   }
 
-  async update(id: number, bank: Bank): Promise<Bank | null> {
-    const entity = BankMapper.toModel(bank);
-    await this.bankRepo.update(id, entity);
-    const newBank = await this.findById(id);
+  async update(bank: Bank): Promise<Bank | null> {
+    const model = BankMapper.toModel(bank);
+    await this.bankRepo.update(model.id, model);
+    const newBank = await this.findById(model.id);
     return newBank ? newBank : null;
   }
 
   async delete(id: number): Promise<void> {
     await this.bankRepo.delete(id);
   }
+
 }
