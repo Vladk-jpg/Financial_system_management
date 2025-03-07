@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module} from '@nestjs/common';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { ServiceProxyModule } from './infrastructure/service-proxy/service-proxy.module';
 import { LoggerModule } from './infrastructure/middleware/logger/logger.module';
