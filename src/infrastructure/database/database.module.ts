@@ -1,17 +1,20 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { BankRepository } from './repositories/bank.repository.impl';
 import { BankModel } from './models/bank.model';
-import { BANK_REPOSITORY } from 'src/domain/interfaces/bank.repository';
+import { BankRepository } from './repositories/bank.repository.impl';
 
+@Global() 
 @Module({
-    imports: [TypeOrmModule.forFeature([BankModel])],
-    providers: [
-        {
-            provide: BANK_REPOSITORY,
-            useClass: BankRepository, 
-        },
-    ],
-    exports: [BANK_REPOSITORY],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'database.sqlite',
+      entities: [BankModel],
+      synchronize: true,
+    }),
+    TypeOrmModule.forFeature([BankModel]),
+  ],
+  providers: [BankRepository],
+  exports: [TypeOrmModule, BankRepository],
 })
 export class DatabaseModule {}
