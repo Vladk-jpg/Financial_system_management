@@ -37,7 +37,7 @@ export class BankRepository implements IBankRepository {
   }
 
   async delete(id: number): Promise<void> {
-    const result = await this.bankRepo.delete(id);
+    await this.bankRepo.delete(id);
   }
 
 }

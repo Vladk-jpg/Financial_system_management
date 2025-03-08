@@ -7,6 +7,7 @@ import {
   Delete,
   Param,
   Inject,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateBankDTO } from 'src/application/dto/create-bank.dto';
 import { BankService } from 'src/application/services/bank.service';
@@ -28,7 +29,8 @@ export class BankController {
 
   @Get(':id')
   async getBankById(@Param('id') id: number) {
-    return await this.bankService.getInstance().getBankById(id);
+    const bank = await this.bankService.getInstance().getBankById(id);
+    if (!bank) throw new NotFoundException('Bank with such id not found');
   }
 
   @Get()
@@ -38,11 +40,12 @@ export class BankController {
 
   @Put(':id')
   async editBank(@Param('id') id: number, @Body() dto: UpdateBankDTO) {
-    return await this.bankService.getInstance().updateBank(id, dto);
+    const bank = await this.bankService.getInstance().updateBank(id, dto);
+    if (!bank) throw new NotFoundException('Bank with such id not found');
   }
 
   @Delete(':id')
   async deleteBank(@Param('id') id: number) {
-    return await this.bankService.getInstance().deleteBank(id);
+    await this.bankService.getInstance().deleteBank(id);
   }
 }

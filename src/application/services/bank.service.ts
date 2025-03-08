@@ -7,19 +7,17 @@ import { ILogger } from 'src/domain/logger/logger.interface';
 export class BankService {
   constructor(
     private readonly logger: ILogger,
-    private readonly bankRepository: IBankRepository,
+    private readonly bankRepository: IBankRepository
   ) {}
 
   async createBank(dto: CreateBankDTO): Promise<Bank> {
     const bank = new Bank(dto.name, dto.bic, dto.address);
     const newBank = await this.bankRepository.create(bank);
-    //this.logger.log('createBank execute', `Bank ${newBank.name} created`);
     return newBank;
   }
 
-  async getBankById(id: number): Promise<Bank> {
+  async getBankById(id: number): Promise<Bank | null> {
     const bank = await this.bankRepository.findById(id);
-    if (!bank) throw new Error('Bank does not exis');
     return bank;
   }
 
@@ -27,12 +25,10 @@ export class BankService {
     return await this.bankRepository.findAll();
   }
 
-  async updateBank(id: number, dto: UpdateBankDTO): Promise<Bank> {
+  async updateBank(id: number, dto: UpdateBankDTO): Promise<Bank | null> {
     const bank = new Bank(dto.name, dto.bic, dto.address);
     bank.id = id;
-    const res = await this.bankRepository.update(bank);
-    if (!res) throw new Error('Bank does not exist');
-    return res;
+    return await this.bankRepository.update(bank);
   }
 
   async deleteBank(id: number): Promise<void> {
