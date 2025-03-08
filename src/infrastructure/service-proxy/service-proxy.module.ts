@@ -2,7 +2,6 @@ import { DynamicModule, Module } from '@nestjs/common';
 
 import { BankService } from 'src/application/services/bank.service';
 
-import { ExceptionsModule } from '../exceptions/exceptions.module';
 import { LoggerModule } from '../middleware/logger/logger.module';
 import { LoggerService } from '../middleware/logger/logger.service';
 
@@ -19,7 +18,7 @@ import { BankRepository } from '../database/repositories/bank.repository.impl';
 import { ServiceProxy } from './service-proxy';
 
 @Module({
-  imports: [LoggerModule, DatabaseModule, ExceptionsModule],
+  imports: [LoggerModule, DatabaseModule],
 })
 export class ServiceProxyModule {
   // Auth
