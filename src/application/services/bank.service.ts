@@ -1,26 +1,20 @@
-import { Injectable, Inject } from '@nestjs/common';
-import {
-  IBankRepository,
-  BANK_REPOSITORY,
-} from 'src/domain/interfaces/bank.repository';
+import { IBankRepository } from 'src/domain/repositories/bank.repository';
 import { Bank } from 'src/domain/entities/bank';
 import { CreateBankDTO } from '../dto/create-bank.dto';
 import { UpdateBankDTO } from '../dto/update-bank.dto';
-import { ConflictException } from '@nestjs/common';
+import { ILogger } from 'src/domain/logger/logger.interface';
 
-@Injectable()
 export class BankService {
   constructor(
-    @Inject(BANK_REPOSITORY) private readonly bankRepository: IBankRepository,
+    private readonly logger: ILogger,
+    private readonly bankRepository: IBankRepository,
   ) {}
 
   async createBank(dto: CreateBankDTO): Promise<Bank> {
-    try {
-      const bank = new Bank(dto.name, dto.bic, dto.address);
-      return await this.bankRepository.create(bank);
-    } catch (error) {
-      throw new ConflictException('Bank with such BIC or name already exist');
-    }
+    const bank = new Bank(dto.name, dto.bic, dto.address);
+    const newBank = await this.bankRepository.create(bank);
+    //this.logger.log('createBank execute', `Bank ${newBank.name} created`);
+    return newBank;
   }
 
   async getBankById(id: number): Promise<Bank> {

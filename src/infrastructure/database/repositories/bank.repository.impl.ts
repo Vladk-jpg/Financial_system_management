@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IBankRepository } from 'src/domain/interfaces/bank.repository';
+import { IBankRepository } from 'src/domain/repositories/bank.repository';
 import { BankModel } from '../models/bank.model';
 import { Bank } from 'src/domain/entities/bank';
 import { BankMapper } from '../mappers/bank.mapper';
@@ -37,7 +37,7 @@ export class BankRepository implements IBankRepository {
   }
 
   async delete(id: number): Promise<void> {
-    await this.bankRepo.delete(id);
+    const result = await this.bankRepo.delete(id);
   }
 
 }

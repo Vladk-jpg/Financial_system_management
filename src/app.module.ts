@@ -1,26 +1,17 @@
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { BankModel } from './infrastructure/database/models/bank.model';
-import { BankController } from './api/bank/bank.controller';
-import { ApplicationModule } from './application/application.module';
+import { Module} from '@nestjs/common';
 import { DatabaseModule } from './infrastructure/database/database.module';
-import { LoggingMiddleware } from './infrastructure/middleware/logging.middleware';
+import { ServiceProxyModule } from './infrastructure/service-proxy/service-proxy.module';
+import { LoggerModule } from './infrastructure/middleware/logger/logger.module';
+import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module';
+import { ControllersModule } from './infrastructure/controllers/controllers.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',                    
-      database: 'database.sqlite',      
-      entities: [BankModel],          
-      synchronize: true,             
-  }),
     DatabaseModule,
-    ApplicationModule,
+    LoggerModule,
+    ExceptionsModule,
+    ControllersModule,
+    ServiceProxyModule.register(),
   ],
-  controllers: [BankController],
 })
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggingMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}
