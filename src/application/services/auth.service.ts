@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { IJwtService } from 'src/domain/adapters/jwt.interface';
 import { User } from 'src/domain/entities/user';
 import { loginDTO } from '../dto/login.dto';
 import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { IBcryptService } from 'src/domain/adapters/bcrypt.interfase';
 
-@Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: IJwtService,
