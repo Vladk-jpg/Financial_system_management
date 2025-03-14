@@ -8,13 +8,14 @@ import {
   NestFastifyApplication,
   FastifyAdapter,
 } from '@nestjs/platform-fastify';
-import { ValidationPipe } from '@nestjs/common';
+import fastifyCookie from '@fastify/cookie';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
   );
+  await app.register(fastifyCookie);
 
   app.enableCors();
 

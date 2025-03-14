@@ -16,7 +16,7 @@ export class BankRepository implements IBankRepository {
   async create(bank: Bank): Promise<Bank> {
     const entity = BankMapper.toModel(bank);
     const savedEntity = await this.bankRepo.save(entity);
-    return savedEntity;
+    return BankMapper.toDomain(savedEntity);
   }
 
   async findById(id: number): Promise<Bank | null> {

@@ -7,7 +7,9 @@ export enum UserRole {
 }
 
 export class User {
-  public id!: string;
+  public id!: number;
+  public isActive: boolean = false;
+  public role: UserRole = UserRole.CLIENT;
   constructor(
     public fullName: string,
     public passportNumber: string,
@@ -15,7 +17,6 @@ export class User {
     public phone: string,
     public email: string,
     public passwordHash: string,
-    public role: UserRole = UserRole.CLIENT,
     public isForeign: boolean = false,
   ) {}
 }

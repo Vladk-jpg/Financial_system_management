@@ -3,7 +3,7 @@ import { ILogger } from '../../../domain/logger/logger.interface';
 
 @Injectable()
 export class LoggerService extends Logger implements ILogger {
-  debug(context: string, message: string) {
+  debug(message: string, context?: string) {
     if (process.env.NODE_ENV !== 'production') {
       super.debug(`${message}`, context);
     }
