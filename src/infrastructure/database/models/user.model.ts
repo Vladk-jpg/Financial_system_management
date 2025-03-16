@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from 'typeorm';
 import { UserRole } from 'src/domain/entities/user';
+import { AccountModel } from './account.model';
 
 @Entity('users')
 @Unique(['email'])
@@ -38,4 +39,7 @@ export class UserModel {
 
   @Column({ default: false })
   isForeign!: boolean;
+
+  @OneToMany(() => AccountModel, (account) => account.user)
+  accounts!: AccountModel[];
 }

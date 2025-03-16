@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from 'typeorm';
+import { AccountModel } from './account.model';
 
 @Entity('banks')
 @Unique(['name', 'bic'])
@@ -14,4 +15,7 @@ export class BankModel {
 
   @Column()
   address!: string;
+
+  @OneToMany(() => AccountModel, (account) => account.bank)
+  accounts!: AccountModel[];
 }
