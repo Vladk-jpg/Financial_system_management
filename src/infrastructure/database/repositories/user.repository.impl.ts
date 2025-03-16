@@ -12,6 +12,12 @@ export class UserRepository implements IUserRepository {
     @InjectRepository(UserModel)
     private readonly userRepo: Repository<UserModel>,
   ) {}
+  async update(user: User): Promise<User | null> {
+    const model = UserMapper.toModel(user);
+    await this.userRepo.update(model.id, model);
+    const newUser = await this.findById(model.id);
+    return newUser ? newUser : null;
+  }
 
   async findByPassport(passportNumber: string): Promise<User | null> {
     const userModel = await this.userRepo.findOne({

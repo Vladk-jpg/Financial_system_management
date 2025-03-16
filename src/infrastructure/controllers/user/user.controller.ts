@@ -9,6 +9,7 @@ import {
   Post,
   Query,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDTO } from 'src/application/dto/create-user.dto';
@@ -43,7 +44,7 @@ export class UserController {
     if (!user) throw new NotFoundException('User with such id not found');
     return user;
   }
-  
+
   @Get('by-passport')
   async getUserByPassport(@Query('passportNumber') passportNumber: string) {
     const user = await this.userService.getUserByPassport(passportNumber);
