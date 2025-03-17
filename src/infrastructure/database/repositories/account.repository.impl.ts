@@ -38,7 +38,10 @@ export class AccountRepository implements IAccountRepository {
   }
 
   async findById(id: number): Promise<Account | null> {
-    const account = await this.accountRepo.findOne({ where: { id: id } });
+    const account = await this.accountRepo.findOne({
+      where: { id: id },
+      relations: ['user', 'bank'],
+    });
     return account ? AccountMapper.toDomain(account) : null;
   }
 
@@ -51,7 +54,9 @@ export class AccountRepository implements IAccountRepository {
   }
 
   async freeze(id: number): Promise<Account | null> {
-    const account = await this.accountRepo.findOne({ where: { id: id } });
+    const account = await this.accountRepo.findOne({
+      where: { id: id },
+    });
     if (!account) return null;
     account.state = AccountState.FROZEN;
     await this.accountRepo.update(id, account);
@@ -59,12 +64,16 @@ export class AccountRepository implements IAccountRepository {
     return updatedAccount;
   }
 
-  async updateIBAN(id: number, IBAN: string): Promise<Account | null> {
-    const account = await this.accountRepo.findOne({ where: { id } });
+  async block(id: number): Promise<Account | null> {
+    const account = await this.accountRepo.findOne({ where: { id: id } });
     if (!account) return null;
-    account.IBAN = IBAN;
+    account.state = AccountState.BLOCKED;
     await this.accountRepo.update(id, account);
     const updatedAccount = await this.findById(id);
     return updatedAccount;
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.accountRepo.delete(id);
   }
 }

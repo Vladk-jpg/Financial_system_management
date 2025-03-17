@@ -5,5 +5,6 @@ export interface IAccountRepository {
   findById(id: number): Promise<Account | null>;
   findAllByUserId(id: number): Promise<Account[]>;
   freeze(id: number): Promise<Account | null>;
-  updateIBAN(id: number, IBAN: string): Promise<Account | null>;
+  delete(id: number): Promise<void>;
+  block(id: number): Promise<Account | null>;
 }

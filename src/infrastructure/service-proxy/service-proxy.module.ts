@@ -18,15 +18,20 @@ import { JwtModule } from '../services/jwt/jwt.module';
 import { JwtService } from '../services/jwt/jwt.service';
 import { AuthService } from 'src/application/services/auth.service';
 import { ProfileService } from 'src/application/services/profile.service';
+import { AccountRepository } from '../database/repositories/account.repository.impl';
+import { IBANgenerator } from '../services/IBAN/iban-gen.service';
+import { IBANModule } from '../services/IBAN/iban-gen.module';
+import { AccountService } from 'src/application/services/account.service';
 
 @Module({
-  imports: [LoggerModule, DatabaseModule, BcryptModule, JwtModule],
+  imports: [LoggerModule, DatabaseModule, BcryptModule, JwtModule, IBANModule],
 })
 export class ServiceProxyModule {
-  static AUTH_SERVICE_PROXY = 'AuthServiceProxy';
+  static AUTH_SERVICE_PROXY = 'authServiceProxy';
   static BANK_SERVICE_PROXY = 'bankServiceProxy';
   static USER_SERVICE_PROXY = 'userServiceProxy';
   static PROFILE_SERVICE_PROXY = 'profileServiceProxy';
+  static ACCOUNT_SERVICE_PROXY = 'accountServiceProxy';
 
   static register(): DynamicModule {
     return {
@@ -62,12 +67,19 @@ export class ServiceProxyModule {
           useFactory: (repo: UserRepository) =>
             new ServiceProxy(new ProfileService(repo)),
         },
+        {
+          inject: [AccountRepository, IBANgenerator],
+          provide: ServiceProxyModule.ACCOUNT_SERVICE_PROXY,
+          useFactory: (repo: AccountRepository, iban: IBANgenerator) =>
+            new ServiceProxy(new AccountService(repo, iban)),
+        },
       ],
       exports: [
         ServiceProxyModule.BANK_SERVICE_PROXY,
         ServiceProxyModule.USER_SERVICE_PROXY,
         ServiceProxyModule.AUTH_SERVICE_PROXY,
         ServiceProxyModule.PROFILE_SERVICE_PROXY,
+        ServiceProxyModule.ACCOUNT_SERVICE_PROXY,
       ],
     };
   }

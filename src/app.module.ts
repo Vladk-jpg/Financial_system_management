@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtModule as JwtServiceModule} from './infrastructure/services/jwt/jwt.module'
 import { JwtStrategy } from './infrastructure/common/strategies/jwt.strategy';
 import { BcryptModule } from './infrastructure/services/bcrypt/bcrypt.module';
+import { IBANModule } from './infrastructure/services/IBAN/iban-gen.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { BcryptModule } from './infrastructure/services/bcrypt/bcrypt.module';
     ControllersModule,
     ServiceProxyModule.register(),
     JwtServiceModule,
-    BcryptModule
+    BcryptModule,
+    IBANModule,
   ],
   providers: [JwtStrategy],
 })
