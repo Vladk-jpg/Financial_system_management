@@ -45,9 +45,9 @@ export class AccountController {
     return account;
   }
 
-  @Get('user/:userId')
-  async getAllAccountsByUserId(@Param('userId') userId: number) {
-    const accounts = await this.accountService.findAllByUserId(userId);
+  @Get()
+  async getAllAccountsByUserId(@Request() req: any) {
+    const accounts = await this.accountService.findAllByUserId(req.user.id);
     return accounts;
   }
 
