@@ -1,6 +1,6 @@
 export interface IUnitOfWork {
-    begin(): Promise<void>;
-    commit(): Promise<void>;
-    rollback(): Promise<void>;
-  }
-  
+  begin(): Promise<void>;
+  commit(): Promise<void>;
+  rollback(): Promise<void>;
+  getManager<T>(): T; 
+}

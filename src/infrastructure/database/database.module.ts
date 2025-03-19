@@ -7,6 +7,8 @@ import { UserRepository } from './repositories/user.repository.impl';
 import { AccountModel } from './models/account.model';
 import { UnitOfWorkService } from './utils/unit-of-work.service';
 import { AccountRepository } from './repositories/account.repository.impl';
+import { TransactionModel } from './models/transaction.model';
+import { TransactionRepository } from './repositories/transaction.repository.impl';
 
 @Global()
 @Module({
@@ -14,16 +16,22 @@ import { AccountRepository } from './repositories/account.repository.impl';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'database.sqlite',
-      entities: [BankModel, UserModel, AccountModel],
+      entities: [BankModel, UserModel, AccountModel, TransactionModel],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([BankModel, UserModel, AccountModel]),
+    TypeOrmModule.forFeature([
+      BankModel,
+      UserModel,
+      AccountModel,
+      TransactionModel,
+    ]),
   ],
   providers: [
     BankRepository,
     UserRepository,
     UnitOfWorkService,
     AccountRepository,
+    TransactionRepository,
   ],
   exports: [
     TypeOrmModule,
@@ -31,6 +39,7 @@ import { AccountRepository } from './repositories/account.repository.impl';
     UserRepository,
     UnitOfWorkService,
     AccountRepository,
+    TransactionRepository,
   ],
 })
 export class DatabaseModule {}

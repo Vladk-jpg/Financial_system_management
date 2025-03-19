@@ -5,9 +5,10 @@ import { UserController } from './user.controller';
 import { AuthController } from './auth.controller';
 import { ProfileController } from './profile.controller';
 import { AccountController } from './account.controller';
+import { TransactionController } from './transaction.controller';
 
 @Module({
   imports: [ServiceProxyModule.register()],
-  controllers: [BankController, UserController, AuthController, ProfileController, AccountController],
+  controllers: [BankController, UserController, AuthController, ProfileController, AccountController, TransactionController],
 })
 export class ControllersModule {}

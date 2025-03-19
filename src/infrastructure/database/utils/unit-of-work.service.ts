@@ -1,34 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';  
+import { DataSource, QueryRunner } from 'typeorm';
 import { IUnitOfWork } from 'src/domain/interfaces/unit-of-work.interface';
 
 @Injectable()
 export class UnitOfWorkService implements IUnitOfWork {
-  private readonly dataSource: DataSource;
+  private queryRunner!: QueryRunner;
 
-  constructor(dataSource: DataSource) {
-    this.dataSource = dataSource;
-  }
+  constructor(private readonly dataSource: DataSource) {}
 
   async begin(): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.startTransaction();
-    this.dataSource['queryRunner'] = queryRunner;
+    this.queryRunner = this.dataSource.createQueryRunner();
+    await this.queryRunner.connect();
+    await this.queryRunner.startTransaction();
   }
 
   async commit(): Promise<void> {
-    const queryRunner = this.dataSource['queryRunner'];
-    if (queryRunner) {
-      await queryRunner.commitTransaction();
-      await queryRunner.release();
-    }
+    await this.queryRunner.commitTransaction();
+    await this.queryRunner.release();
   }
 
   async rollback(): Promise<void> {
-    const queryRunner = this.dataSource['queryRunner'];
-    if (queryRunner) {
-      await queryRunner.rollbackTransaction();
-      await queryRunner.release();
-    }
+    await this.queryRunner.rollbackTransaction();
+    await this.queryRunner.release();
+  }
+
+  getManager<T>(): T {
+    return this.queryRunner.manager as unknown as T;
   }
 }
