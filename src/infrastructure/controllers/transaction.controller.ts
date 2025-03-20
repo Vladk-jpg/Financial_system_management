@@ -5,7 +5,10 @@ import {
   Param,
   Post,
   UseGuards,
-  Request,
+  Get,
+  Patch,
+  NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -30,5 +33,25 @@ export class TransactionController {
   async transferFunds(@Body() dto: CreateTransactionDTO) {
     await this.transactionService.transferFunds(dto);
     return { message: 'TransferCompleted' };
+  }
+
+  @Patch('account/cancel/:id')
+  async cancelTransaction(@Param('id') id: number) {
+    const transaction = await this.transactionService.cancelTransaction(id);
+    if (!transaction) throw new NotFoundException("Transaction not found");
+    return transaction;
+  }
+
+  @Get(':id')
+  async getTransactionById(@Param('id') id: number) {
+    const transaction = await this.transactionService.getTransactionById(id);
+    if (!transaction) throw new NotFoundException("Transaction not found");
+    return transaction;
+  }
+
+  @Get('account')
+  async getTransactionsByAccountIBAN(@Query('IBAN') iban: string) {
+    const transactions = await this.transactionService.getTransactionsByAccountIBAN(iban);
+    return transactions;
   }
 }

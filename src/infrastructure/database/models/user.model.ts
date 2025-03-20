@@ -1,6 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Unique,
+  OneToMany,
+} from 'typeorm';
 import { UserRole } from 'src/domain/entities/user';
 import { AccountModel } from './account.model';
+import { EnterpriseModel } from './enterprise.model';
 
 @Entity('users')
 @Unique(['email'])
@@ -42,4 +49,7 @@ export class UserModel {
 
   @OneToMany(() => AccountModel, (account) => account.user)
   accounts!: AccountModel[];
+
+  @OneToMany(() => EnterpriseModel, (enterprise) => enterprise.user)
+  enterprises!: EnterpriseModel[];
 }

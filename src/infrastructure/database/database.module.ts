@@ -9,6 +9,8 @@ import { UnitOfWorkService } from './utils/unit-of-work.service';
 import { AccountRepository } from './repositories/account.repository.impl';
 import { TransactionModel } from './models/transaction.model';
 import { TransactionRepository } from './repositories/transaction.repository.impl';
+import { EnterpriseModel } from './models/enterprise.model';
+import { EnterpriseRepository } from './repositories/enterprise.repository.impl';
 
 @Global()
 @Module({
@@ -16,7 +18,13 @@ import { TransactionRepository } from './repositories/transaction.repository.imp
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'database.sqlite',
-      entities: [BankModel, UserModel, AccountModel, TransactionModel],
+      entities: [
+        BankModel,
+        UserModel,
+        AccountModel,
+        TransactionModel,
+        EnterpriseModel,
+      ],
       synchronize: true,
     }),
     TypeOrmModule.forFeature([
@@ -24,6 +32,7 @@ import { TransactionRepository } from './repositories/transaction.repository.imp
       UserModel,
       AccountModel,
       TransactionModel,
+      EnterpriseModel,
     ]),
   ],
   providers: [
@@ -32,6 +41,7 @@ import { TransactionRepository } from './repositories/transaction.repository.imp
     UnitOfWorkService,
     AccountRepository,
     TransactionRepository,
+    EnterpriseRepository,
   ],
   exports: [
     TypeOrmModule,
@@ -40,6 +50,7 @@ import { TransactionRepository } from './repositories/transaction.repository.imp
     UnitOfWorkService,
     AccountRepository,
     TransactionRepository,
+    EnterpriseRepository,
   ],
 })
 export class DatabaseModule {}

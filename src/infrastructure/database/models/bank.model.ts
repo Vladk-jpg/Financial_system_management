@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Unique, OneToMany, OneToOne } from 'typeorm';
 import { AccountModel } from './account.model';
+import { EnterpriseModel } from './enterprise.model';
 
 @Entity('banks')
 @Unique(['name', 'bic'])
@@ -18,4 +19,7 @@ export class BankModel {
 
   @OneToMany(() => AccountModel, (account) => account.bank)
   accounts!: AccountModel[];
+
+  @OneToOne(() => EnterpriseModel, (enterprise) => enterprise.bank)
+  public enterprise!: EnterpriseModel;
 }

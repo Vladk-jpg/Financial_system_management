@@ -6,4 +6,5 @@ export interface IBankRepository {
   findAll(): Promise<Bank[]>;
   update(bank: Bank): Promise<Bank | null>;
   delete(id: number): Promise<void>;
+  isEnterprise(bic: string): Promise<boolean>;
 }

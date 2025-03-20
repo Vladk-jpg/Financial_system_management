@@ -25,6 +25,8 @@ import { AccountService } from 'src/application/services/account.service';
 import { UnitOfWorkService } from '../database/utils/unit-of-work.service';
 import { TransactionRepository } from '../database/repositories/transaction.repository.impl';
 import { TransactionService } from 'src/application/services/transaction.service';
+import { EnterpriseRepository } from '../database/repositories/enterprise.repository.impl';
+import { EnterpriseService } from 'src/application/services/enterprise.service';
 
 @Module({
   imports: [LoggerModule, DatabaseModule, BcryptModule, JwtModule, IBANModule],
@@ -36,6 +38,7 @@ export class ServiceProxyModule {
   static PROFILE_SERVICE_PROXY = 'profileServiceProxy';
   static ACCOUNT_SERVICE_PROXY = 'accountServiceProxy';
   static TRANSACTION_SERVICE_PROXY = 'transactionServiceProxy';
+  static ENTERPRISE_SERVICE_PROXY = 'enterpriseServiceProxy';
 
   static register(): DynamicModule {
     return {
@@ -89,6 +92,14 @@ export class ServiceProxyModule {
               new TransactionService(uow, accountRepo, transactionRepo),
             ),
         },
+        {
+          inject: [BankRepository, EnterpriseRepository],
+          provide: ServiceProxyModule.ENTERPRISE_SERVICE_PROXY,
+          useFactory: (
+            bankRepo: BankRepository,
+            enterRepo: EnterpriseRepository,
+          ) => new ServiceProxy(new EnterpriseService(enterRepo, bankRepo)),
+        },
       ],
       exports: [
         ServiceProxyModule.BANK_SERVICE_PROXY,
@@ -97,6 +108,7 @@ export class ServiceProxyModule {
         ServiceProxyModule.PROFILE_SERVICE_PROXY,
         ServiceProxyModule.ACCOUNT_SERVICE_PROXY,
         ServiceProxyModule.TRANSACTION_SERVICE_PROXY,
+        ServiceProxyModule.ENTERPRISE_SERVICE_PROXY,
       ],
     };
   }

@@ -39,4 +39,12 @@ export class BankRepository implements IBankRepository {
   async delete(id: number): Promise<void> {
     await this.bankRepo.delete(id);
   }
+
+  async isEnterprise(bic: string): Promise<boolean> {
+    const bank = await this.bankRepo.findOne({
+      where: {bic: bic},
+      relations: ['enterprise'],
+    });
+    return bank?.enterprise !== null && bank?.enterprise !== undefined;
+  }
 }
