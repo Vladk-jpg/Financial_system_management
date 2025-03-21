@@ -1,3 +1,4 @@
 export interface IIBANgenerator {
-  generateIBAN(bankId: number, userId: number): Promise<string>;
+  generateIBANforAccount(bankId: number, userId: number): Promise<string>;
+  generateIBANforEAccount(bankId: number, enterpriseId: number): Promise<string>;
 }

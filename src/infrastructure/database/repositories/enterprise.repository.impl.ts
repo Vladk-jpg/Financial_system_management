@@ -27,7 +27,7 @@ export class EnterpriseRepository implements IEnterpriseRepository {
     const user = await this.UserRepo.findOne({
       where: { id: userId },
     });
-    if (!user) throw new Error("User not found");
+    if (!user) throw new Error('User not found');
     const model = EnterpriseMapper.toModel(enterprise);
     model.user = user;
     const bank = isBank
@@ -50,7 +50,7 @@ export class EnterpriseRepository implements IEnterpriseRepository {
     return enterprises.map(EnterpriseMapper.toDomain);
   }
 
-  async findAllByUserID(userId: number): Promise<Enterprise[]> {
+  async findAllByUserId(userId: number): Promise<Enterprise[]> {
     const enterprises = await this.EnterpiseRepo.find({
       where: { user: { id: userId } },
       relations: ['user'],

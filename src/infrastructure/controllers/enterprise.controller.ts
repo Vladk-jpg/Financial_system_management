@@ -9,6 +9,7 @@ import {
   Get,
   Param,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -58,6 +59,12 @@ export class EnterpriseController {
   async getEnterprisesByBic(@Query('bic') bic: string) {
     const enterprises = await this.enterService.getAllByBic(bic);
     return enterprises;
+  }
+
+  @Delete(':id')
+  async deleteEnterprise(@Param('id') id: number) {
+    const enterprise = await this.enterService.getById(id);
+    if (!enterprise) throw new NotFoundException('Enterprise with such id not found');
   }
 
 }

@@ -24,6 +24,11 @@ export class BankRepository implements IBankRepository {
     return entity ? BankMapper.toDomain(entity) : null;
   }
 
+  async findByBic(bic: string): Promise<Bank | null> {
+    const entity = await this.bankRepo.findOne({ where: { bic: bic } });
+    return entity ? BankMapper.toDomain(entity) : null;
+  }
+
   async findAll(): Promise<Bank[]> {
     const entities = await this.bankRepo.find();
     return entities.map(BankMapper.toDomain);
@@ -42,7 +47,7 @@ export class BankRepository implements IBankRepository {
 
   async isEnterprise(bic: string): Promise<boolean> {
     const bank = await this.bankRepo.findOne({
-      where: {bic: bic},
+      where: { bic: bic },
       relations: ['enterprise'],
     });
     return bank?.enterprise !== null && bank?.enterprise !== undefined;

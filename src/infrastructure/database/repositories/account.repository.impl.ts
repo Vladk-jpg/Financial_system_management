@@ -20,8 +20,13 @@ export class AccountRepository implements IAccountRepository {
     @InjectRepository(UserModel)
     private readonly userRepo: Repository<UserModel>,
   ) {}
-  async findByIBAN(iban: string, manager?: EntityManager): Promise<Account | null> {
-    const repo = manager ? manager.getRepository(AccountModel) : this.accountRepo;
+  async findByIBAN(
+    iban: string,
+    manager?: EntityManager,
+  ): Promise<Account | null> {
+    const repo = manager
+      ? manager.getRepository(AccountModel)
+      : this.accountRepo;
     const account = await repo.findOne({
       where: { IBAN: iban },
       relations: ['user', 'bank'],
@@ -46,7 +51,9 @@ export class AccountRepository implements IAccountRepository {
   }
 
   async findById(id: number, manager?: EntityManager): Promise<Account | null> {
-    const repo = manager ? manager.getRepository(AccountModel) : this.accountRepo;
+    const repo = manager
+      ? manager.getRepository(AccountModel)
+      : this.accountRepo;
     const account = await repo.findOne({
       where: { id: id },
       relations: ['user', 'bank'],
@@ -86,7 +93,11 @@ export class AccountRepository implements IAccountRepository {
     await this.accountRepo.delete(id);
   }
 
-  async withdraw(id: number, amount: number, manager: EntityManager): Promise<boolean> {
+  async withdraw(
+    id: number,
+    amount: number,
+    manager: EntityManager,
+  ): Promise<boolean> {
     const repo = manager.getRepository(AccountModel);
     const account = await this.findById(id, manager);
     if (!account || account.balance < amount) {
@@ -96,7 +107,11 @@ export class AccountRepository implements IAccountRepository {
     return true;
   }
 
-  async deposit(id: number, amount: number, manager: EntityManager): Promise<void> {
+  async deposit(
+    id: number,
+    amount: number,
+    manager: EntityManager,
+  ): Promise<void> {
     const repo = manager.getRepository(AccountModel);
     await repo.increment({ id }, 'balance', amount);
   }

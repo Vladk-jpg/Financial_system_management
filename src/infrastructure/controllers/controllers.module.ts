@@ -7,9 +7,19 @@ import { ProfileController } from './profile.controller';
 import { AccountController } from './account.controller';
 import { TransactionController } from './transaction.controller';
 import { EnterpriseController } from './enterprise.controller';
+import { EAccountController } from './e-account.controller';
 
 @Module({
   imports: [ServiceProxyModule.register()],
-  controllers: [BankController, UserController, AuthController, ProfileController, AccountController, TransactionController, EnterpriseController],
+  controllers: [
+    BankController,
+    UserController,
+    AuthController,
+    ProfileController,
+    AccountController,
+    TransactionController,
+    EnterpriseController,
+    EAccountController,
+  ],
 })
 export class ControllersModule {}

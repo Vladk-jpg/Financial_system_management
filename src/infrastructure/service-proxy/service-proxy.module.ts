@@ -27,6 +27,9 @@ import { TransactionRepository } from '../database/repositories/transaction.repo
 import { TransactionService } from 'src/application/services/transaction.service';
 import { EnterpriseRepository } from '../database/repositories/enterprise.repository.impl';
 import { EnterpriseService } from 'src/application/services/enterprise.service';
+import { EAccountRepository } from '../database/repositories/e-account.repository.impl';
+import { EAccountService } from 'src/application/services/e-account.service';
+import { Bank } from 'src/domain/entities/bank';
 
 @Module({
   imports: [LoggerModule, DatabaseModule, BcryptModule, JwtModule, IBANModule],
@@ -39,6 +42,7 @@ export class ServiceProxyModule {
   static ACCOUNT_SERVICE_PROXY = 'accountServiceProxy';
   static TRANSACTION_SERVICE_PROXY = 'transactionServiceProxy';
   static ENTERPRISE_SERVICE_PROXY = 'enterpriseServiceProxy';
+  static EACCOUNT_SERVICE_PROXY = 'eaccountSerivceProxy';
 
   static register(): DynamicModule {
     return {
@@ -100,6 +104,21 @@ export class ServiceProxyModule {
             enterRepo: EnterpriseRepository,
           ) => new ServiceProxy(new EnterpriseService(enterRepo, bankRepo)),
         },
+        {
+          inject: [
+            EAccountRepository,
+            BankRepository,
+            EnterpriseRepository,
+            IBANgenerator,
+          ],
+          provide: ServiceProxyModule.EACCOUNT_SERVICE_PROXY,
+          useFactory: (
+            repo1: EAccountRepository,
+            repo2: BankRepository,
+            repo3: EnterpriseRepository,
+            iban: IBANgenerator,
+          ) => new ServiceProxy(new EAccountService(repo1, repo2, repo3, iban)),
+        },
       ],
       exports: [
         ServiceProxyModule.BANK_SERVICE_PROXY,
@@ -109,6 +128,7 @@ export class ServiceProxyModule {
         ServiceProxyModule.ACCOUNT_SERVICE_PROXY,
         ServiceProxyModule.TRANSACTION_SERVICE_PROXY,
         ServiceProxyModule.ENTERPRISE_SERVICE_PROXY,
+        ServiceProxyModule.EACCOUNT_SERVICE_PROXY,
       ],
     };
   }

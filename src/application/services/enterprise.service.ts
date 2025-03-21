@@ -43,7 +43,7 @@ export class EnterpriseService {
   }
 
   async getAllByUserId(id: number): Promise<Enterprise[]> {
-    const enterprises = await this.enterpriseRepo.findAllByUserID(id);
+    const enterprises = await this.enterpriseRepo.findAllByUserId(id);
     return enterprises;
   }
 

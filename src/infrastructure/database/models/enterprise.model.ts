@@ -1,6 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, Unique } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToOne,
+  JoinColumn,
+  Unique,
+  OneToMany,
+} from 'typeorm';
 import { UserModel } from './user.model';
 import { BankModel } from './bank.model';
+import { EAccountModel } from './e-account.model';
 
 @Entity('enterprises')
 @Unique(['name'])
@@ -24,10 +34,13 @@ export class EnterpriseModel {
   public address!: string;
 
   @ManyToOne(() => UserModel, (user) => user.enterprises, { nullable: true })
-  @JoinColumn()  
+  @JoinColumn()
   public user!: UserModel | null;
 
   @OneToOne(() => BankModel, { nullable: true })
-  @JoinColumn()  
+  @JoinColumn()
   public bank!: BankModel | null;
+
+  @OneToMany(() => EAccountModel, (eaccount) => eaccount.enterprise)
+  eaccounts!: EAccountModel[];
 }

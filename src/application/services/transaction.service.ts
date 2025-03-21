@@ -4,6 +4,7 @@ import { ITransactionRepository } from 'src/domain/repositories/transaction.repo
 import { CreateTransactionDTO } from '../dto/create-transaction.dto';
 import { ParticipantType, Transaction } from 'src/domain/entities/transaction';
 import { AccountState } from 'src/domain/entities/account';
+import { OperationState } from 'src/domain/enums/operation-state.enum';
 
 export class TransactionService {
   constructor(
@@ -78,6 +79,7 @@ export class TransactionService {
     const manager = this.unitOfWork.getManager<any>();
     const transaction = await this.transactionRepository.getTransactionById(id);
     if (!transaction) return null;
+    if (transaction.state == OperationState.CANCELED) return null;
 
     try {
       const fromAccount = await this.accountRepository.findById(

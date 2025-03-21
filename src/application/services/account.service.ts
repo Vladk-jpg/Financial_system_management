@@ -9,7 +9,7 @@ export class AccountService {
   ) {}
 
   async createAccount(bankId: number, userId: number): Promise<Account | null> {
-    const IBAN = await this.IBANService.generateIBAN(bankId, userId);
+    const IBAN = await this.IBANService.generateIBANforAccount(bankId, userId);
     const account = new Account(IBAN, bankId, userId);
     const created = await this.accountRepository.create(account);
     return created;
