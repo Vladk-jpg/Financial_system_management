@@ -29,13 +29,13 @@ export class TransactionController {
     this.transactionService = transactionServiceProxy.getInstance();
   }
 
-  @Post('account/transfer')
+  @Post('transfer')
   async transferFunds(@Body() dto: CreateTransactionDTO) {
     await this.transactionService.transferFunds(dto);
     return { message: 'TransferCompleted' };
   }
 
-  @Patch('account/cancel/:id')
+  @Patch('cancel/:id')
   async cancelTransaction(@Param('id') id: number) {
     const transaction = await this.transactionService.cancelTransaction(id);
     if (!transaction) throw new NotFoundException("Transaction not found");

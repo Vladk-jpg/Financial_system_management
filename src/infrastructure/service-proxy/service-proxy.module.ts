@@ -85,15 +85,16 @@ export class ServiceProxyModule {
             new ServiceProxy(new AccountService(repo, iban)),
         },
         {
-          inject: [UnitOfWorkService, AccountRepository, TransactionRepository],
+          inject: [UnitOfWorkService, AccountRepository, EAccountRepository, TransactionRepository],
           provide: ServiceProxyModule.TRANSACTION_SERVICE_PROXY,
           useFactory: (
             uow: UnitOfWorkService,
             accountRepo: AccountRepository,
+            eaccountRepo: EAccountRepository,
             transactionRepo: TransactionRepository,
           ) =>
             new ServiceProxy(
-              new TransactionService(uow, accountRepo, transactionRepo),
+              new TransactionService(uow, accountRepo, eaccountRepo, transactionRepo),
             ),
         },
         {

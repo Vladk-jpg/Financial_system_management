@@ -44,6 +44,7 @@ export class TransactionRepository implements ITransactionRepository {
     });
     if (!transaction) return null;
     transaction.state = OperationState.CANCELED;
+    transaction.createdAt;
     await this.transactionRepo.update(id, transaction);
     return TransactionMapper.toDomain(transaction);
   }

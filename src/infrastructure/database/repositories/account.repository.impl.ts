@@ -100,7 +100,7 @@ export class AccountRepository implements IAccountRepository {
   ): Promise<boolean> {
     const repo = manager.getRepository(AccountModel);
     const account = await this.findById(id, manager);
-    if (!account || account.balance < amount) {
+    if (!account) {
       return false;
     }
     await repo.decrement({ id }, 'balance', amount);

@@ -65,7 +65,7 @@ export class EAccountRepository implements IEAccountRepository {
       ? manager.getRepository(EAccountModel)
       : this.eaccountRepo;
     const eaccount = await repo.findOne({
-      where: { iban: iban },
+      where: { IBAN: iban },
       relations: ['enterprise', 'bank'],
     });
     return eaccount ? EAccountMapper.toDomain(eaccount) : null;
@@ -105,7 +105,7 @@ export class EAccountRepository implements IEAccountRepository {
   async withdraw(id: number, amount: number, manager: any): Promise<boolean> {
     const repo = manager.getRepository(EAccountModel);
     const eaccount = await this.findById(id, manager);
-    if (!eaccount || eaccount.balance < amount) {
+    if (!eaccount) {
       return false;
     }
     await repo.decrement({ id }, 'balance', amount);

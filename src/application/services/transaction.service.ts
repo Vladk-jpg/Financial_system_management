@@ -5,11 +5,13 @@ import { CreateTransactionDTO } from '../dto/create-transaction.dto';
 import { ParticipantType, Transaction } from 'src/domain/entities/transaction';
 import { AccountState } from 'src/domain/entities/account';
 import { OperationState } from 'src/domain/enums/operation-state.enum';
+import { IEAccountRepository } from 'src/domain/repositories/e-account.repository';
 
 export class TransactionService {
   constructor(
     private readonly unitOfWork: IUnitOfWork,
     private readonly accountRepository: IAccountRepository,
+    private readonly eaccountRepository: IEAccountRepository,
     private readonly transactionRepository: ITransactionRepository,
   ) {}
 
@@ -18,11 +20,20 @@ export class TransactionService {
     const manager = this.unitOfWork.getManager<any>();
 
     try {
-      const fromAccount = await this.accountRepository.findByIBAN(
+      const senderRepo =
+        dto.senderType == ParticipantType.ACCOUNT
+          ? this.accountRepository
+          : this.eaccountRepository;
+      const recipientRepo =
+        dto.recipientType == ParticipantType.ACCOUNT
+          ? this.accountRepository
+          : this.eaccountRepository;
+
+      const fromAccount = await senderRepo.findByIBAN(
         dto.senderIBAN,
         manager,
       );
-      const toAccount = await this.accountRepository.findByIBAN(
+      const toAccount = await recipientRepo.findByIBAN(
         dto.recipientIBAN,
         manager,
       );
@@ -42,7 +53,7 @@ export class TransactionService {
         throw new Error('Not enough money');
       }
 
-      const isWithdrawn = await this.accountRepository.withdraw(
+      const isWithdrawn = await senderRepo.withdraw(
         fromAccount.id,
         dto.amount,
         manager,
@@ -51,12 +62,12 @@ export class TransactionService {
         throw new Error('Failure to withdraw money');
       }
 
-      await this.accountRepository.deposit(toAccount.id, dto.amount, manager);
+      await recipientRepo.deposit(toAccount.id, dto.amount, manager);
 
       const transaction = new Transaction(
-        ParticipantType.ACCOUNT,
+        dto.senderType,
         fromAccount.id,
-        ParticipantType.ACCOUNT,
+        dto.recipientType,
         toAccount.id,
         dto.amount,
       );
@@ -82,11 +93,20 @@ export class TransactionService {
     if (transaction.state == OperationState.CANCELED) return null;
 
     try {
-      const fromAccount = await this.accountRepository.findById(
+      const senderRepo =
+        transaction.senderType == ParticipantType.ACCOUNT
+          ? this.accountRepository
+          : this.eaccountRepository;
+      const recipientRepo =
+        transaction.recipientType == ParticipantType.ACCOUNT
+          ? this.accountRepository
+          : this.eaccountRepository;
+
+      const fromAccount = await senderRepo.findById(
         transaction.senderId,
         manager,
       );
-      const toAccount = await this.accountRepository.findById(
+      const toAccount = await recipientRepo.findById(
         transaction.recipientId,
         manager,
       );
@@ -95,7 +115,7 @@ export class TransactionService {
         throw new Error('One of the accounts does not exist');
       }
 
-      const isWithdrawn = await this.accountRepository.withdraw(
+      const isWithdrawn = await recipientRepo.withdraw(
         toAccount.id,
         transaction.amount,
         manager,
@@ -104,16 +124,16 @@ export class TransactionService {
         throw new Error('Failure to withdraw money');
       }
 
-      await this.accountRepository.deposit(
+      await senderRepo.deposit(
         fromAccount.id,
         transaction.amount,
         manager,
       );
 
       const newTransaction = new Transaction(
-        ParticipantType.ACCOUNT,
+        transaction.recipientType,
         toAccount.id,
-        ParticipantType.ACCOUNT,
+        transaction.senderType,
         fromAccount.id,
         transaction.amount,
       );
@@ -128,7 +148,8 @@ export class TransactionService {
   }
 
   async getTransactionsByAccountIBAN(iban: string): Promise<Transaction[]> {
-    const account = await this.accountRepository.findByIBAN(iban);
+    const repo = iban[18] == 'U' ? this.accountRepository : this.eaccountRepository;
+    const account = await repo.findByIBAN(iban);
     var transactions: Transaction[] = [];
     if (!account) return transactions;
     transactions = await this.transactionRepository.getTransactionsByAccountId(
