@@ -1,7 +1,7 @@
 export interface ILogger {
-    debug(context: string, message: string): void;
-    log(context: string, message: string): void;
-    error(context: string, message: string, trace?: string): void;
-    warn(context: string, message: string): void;
-    verbose(context: string, message: string): void;
-  }
+  debug(message: string, context?: string): void;
+  log(message: string, context?: string): void;
+  error(message: string, trace?: string, context?: string): void;
+  warn(message: string, context?: string): void;
+  verbose(message: string, context?: string): void;
+}

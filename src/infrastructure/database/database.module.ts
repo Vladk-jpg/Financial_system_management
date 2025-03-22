@@ -13,6 +13,9 @@ import { EnterpriseModel } from './models/enterprise.model';
 import { EnterpriseRepository } from './repositories/enterprise.repository.impl';
 import { EAccountModel } from './models/e-account.model';
 import { EAccountRepository } from './repositories/e-account.repository.impl';
+import { SalaryProjectModel } from './models/salary-project.model';
+import { EmployeeModel } from './models/employee.model';
+import { SalaryProjectRepository } from './repositories/salary-project.repository.impl';
 
 @Global()
 @Module({
@@ -27,6 +30,8 @@ import { EAccountRepository } from './repositories/e-account.repository.impl';
         TransactionModel,
         EnterpriseModel,
         EAccountModel,
+        SalaryProjectModel,
+        EmployeeModel,
       ],
       synchronize: true,
     }),
@@ -37,6 +42,8 @@ import { EAccountRepository } from './repositories/e-account.repository.impl';
       TransactionModel,
       EnterpriseModel,
       EAccountModel,
+      SalaryProjectModel,
+      EmployeeModel,
     ]),
   ],
   providers: [
@@ -47,6 +54,7 @@ import { EAccountRepository } from './repositories/e-account.repository.impl';
     TransactionRepository,
     EnterpriseRepository,
     EAccountRepository,
+    SalaryProjectRepository,
   ],
   exports: [
     TypeOrmModule,
@@ -57,6 +65,7 @@ import { EAccountRepository } from './repositories/e-account.repository.impl';
     TransactionRepository,
     EnterpriseRepository,
     EAccountRepository,
+    SalaryProjectRepository,
   ],
 })
 export class DatabaseModule {}

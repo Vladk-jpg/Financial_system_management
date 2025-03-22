@@ -11,6 +11,7 @@ import {
 import { UserModel } from './user.model';
 import { BankModel } from './bank.model';
 import { EAccountModel } from './e-account.model';
+import { SalaryProjectModel } from './salary-project.model';
 
 @Entity('enterprises')
 @Unique(['name'])
@@ -43,4 +44,7 @@ export class EnterpriseModel {
 
   @OneToMany(() => EAccountModel, (eaccount) => eaccount.enterprise)
   eaccounts!: EAccountModel[];
+
+  @OneToOne(() => SalaryProjectModel, (salaryProject) => salaryProject.enterprise)
+  salaryProject!: SalaryProjectModel;
 }

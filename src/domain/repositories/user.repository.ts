@@ -7,4 +7,5 @@ export interface IUserRepository {
   create(user: User): Promise<User>;
   delete(id: number): Promise<void>;
   update(user: User): Promise<User | null>;
+  findAllInactive(): Promise<User[]>;
 }

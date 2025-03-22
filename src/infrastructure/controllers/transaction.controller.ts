@@ -38,20 +38,30 @@ export class TransactionController {
   @Patch('cancel/:id')
   async cancelTransaction(@Param('id') id: number) {
     const transaction = await this.transactionService.cancelTransaction(id);
-    if (!transaction) throw new NotFoundException("Transaction not found");
+    if (!transaction) throw new NotFoundException('Transaction not found');
     return transaction;
   }
 
   @Get(':id')
   async getTransactionById(@Param('id') id: number) {
     const transaction = await this.transactionService.getTransactionById(id);
-    if (!transaction) throw new NotFoundException("Transaction not found");
+    if (!transaction) throw new NotFoundException('Transaction not found');
     return transaction;
   }
 
   @Get('account')
   async getTransactionsByAccountIBAN(@Query('IBAN') iban: string) {
-    const transactions = await this.transactionService.getTransactionsByAccountIBAN(iban);
+    const transactions =
+      await this.transactionService.getTransactionsByAccountIBAN(iban);
     return transactions;
+  }
+
+  @Post('salary/:enterId')
+  async sendSalary(
+    @Body('IBAN') iban: string,
+    @Param('enterId') enterId: number,
+  ) {
+    console.log(iban);
+    await this.transactionService.sendSalary(enterId, iban);
   }
 }

@@ -10,6 +10,7 @@ import {
   Query,
   UseGuards,
   Request,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateUserDTO } from 'src/application/dto/create-user.dto';
@@ -61,4 +62,14 @@ export class UserController {
     await this.userService.deleteUser(id);
   }
 
+  @Patch('activate/:id')
+  async activateuser(@Param('id') id: number) {
+    await this.userService.activateUser(id);
+    return { message: 'User successfuly activated!' };
+  }
+
+  @Get('inactive')
+  async getAllInactiveUsers() {
+    return await this.userService.getAllInactiveUsers();
+  }
 }

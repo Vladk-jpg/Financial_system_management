@@ -29,10 +29,20 @@ import { EnterpriseRepository } from '../database/repositories/enterprise.reposi
 import { EnterpriseService } from 'src/application/services/enterprise.service';
 import { EAccountRepository } from '../database/repositories/e-account.repository.impl';
 import { EAccountService } from 'src/application/services/e-account.service';
-import { Bank } from 'src/domain/entities/bank';
+import { ExceptionsService } from '../exceptions/exceptions.service';
+import { ExceptionsModule } from '../exceptions/exceptions.module';
+import { SalaryProjectRepository } from '../database/repositories/salary-project.repository.impl';
+import { SalaryProjectService } from 'src/application/services/salary-project.service';
 
 @Module({
-  imports: [LoggerModule, DatabaseModule, BcryptModule, JwtModule, IBANModule],
+  imports: [
+    LoggerModule,
+    DatabaseModule,
+    BcryptModule,
+    JwtModule,
+    IBANModule,
+    ExceptionsModule,
+  ],
 })
 export class ServiceProxyModule {
   static AUTH_SERVICE_PROXY = 'authServiceProxy';
@@ -43,6 +53,7 @@ export class ServiceProxyModule {
   static TRANSACTION_SERVICE_PROXY = 'transactionServiceProxy';
   static ENTERPRISE_SERVICE_PROXY = 'enterpriseServiceProxy';
   static EACCOUNT_SERVICE_PROXY = 'eaccountSerivceProxy';
+  static SALARY_PROJECT_SERVICE_PROXY = 'salaryProjectProxy';
 
   static register(): DynamicModule {
     return {
@@ -55,22 +66,34 @@ export class ServiceProxyModule {
             new ServiceProxy(new BankService(logger, repo)),
         },
         {
-          inject: [LoggerService, UserRepository, BcryptService],
+          inject: [
+            LoggerService,
+            UserRepository,
+            BcryptService,
+            ExceptionsService,
+          ],
           provide: ServiceProxyModule.USER_SERVICE_PROXY,
           useFactory: (
             logger: LoggerService,
             repo: UserRepository,
             bcrypt: BcryptService,
-          ) => new ServiceProxy(new UserService(repo, logger, bcrypt)),
+            exc: ExceptionsService,
+          ) => new ServiceProxy(new UserService(repo, logger, bcrypt, exc)),
         },
         {
-          inject: [JwtService, UserRepository, BcryptService],
+          inject: [
+            JwtService,
+            UserRepository,
+            BcryptService,
+            ExceptionsService,
+          ],
           provide: ServiceProxyModule.AUTH_SERVICE_PROXY,
           useFactory: (
             jwtService: JwtService,
             repo: UserRepository,
             bcrypt: BcryptService,
-          ) => new ServiceProxy(new AuthService(jwtService, repo, bcrypt)),
+            exc: ExceptionsService,
+          ) => new ServiceProxy(new AuthService(jwtService, repo, bcrypt, exc)),
         },
         {
           inject: [UserRepository],
@@ -85,25 +108,48 @@ export class ServiceProxyModule {
             new ServiceProxy(new AccountService(repo, iban)),
         },
         {
-          inject: [UnitOfWorkService, AccountRepository, EAccountRepository, TransactionRepository],
+          inject: [
+            UnitOfWorkService,
+            AccountRepository,
+            EAccountRepository,
+            TransactionRepository,
+            SalaryProjectRepository,
+            ExceptionsService,
+            LoggerService,
+          ],
           provide: ServiceProxyModule.TRANSACTION_SERVICE_PROXY,
           useFactory: (
             uow: UnitOfWorkService,
             accountRepo: AccountRepository,
             eaccountRepo: EAccountRepository,
             transactionRepo: TransactionRepository,
+            salaryRepo: SalaryProjectRepository,
+            exc: ExceptionsService,
+            logger: LoggerService,
           ) =>
             new ServiceProxy(
-              new TransactionService(uow, accountRepo, eaccountRepo, transactionRepo),
+              new TransactionService(
+                uow,
+                accountRepo,
+                eaccountRepo,
+                transactionRepo,
+                salaryRepo,
+                exc,
+                logger,
+              ),
             ),
         },
         {
-          inject: [BankRepository, EnterpriseRepository],
+          inject: [BankRepository, EnterpriseRepository, UserRepository],
           provide: ServiceProxyModule.ENTERPRISE_SERVICE_PROXY,
           useFactory: (
             bankRepo: BankRepository,
             enterRepo: EnterpriseRepository,
-          ) => new ServiceProxy(new EnterpriseService(enterRepo, bankRepo)),
+            userRepo: UserRepository,
+          ) =>
+            new ServiceProxy(
+              new EnterpriseService(enterRepo, bankRepo, userRepo),
+            ),
         },
         {
           inject: [
@@ -120,6 +166,19 @@ export class ServiceProxyModule {
             iban: IBANgenerator,
           ) => new ServiceProxy(new EAccountService(repo1, repo2, repo3, iban)),
         },
+        {
+          inject: [
+            SalaryProjectRepository,
+            EnterpriseRepository,
+            ExceptionsService,
+          ],
+          provide: ServiceProxyModule.SALARY_PROJECT_SERVICE_PROXY,
+          useFactory: (
+            repo1: SalaryProjectRepository,
+            repo2: EnterpriseRepository,
+            exc: ExceptionsService,
+          ) => new ServiceProxy(new SalaryProjectService(repo1, repo2, exc)),
+        },
       ],
       exports: [
         ServiceProxyModule.BANK_SERVICE_PROXY,
@@ -130,6 +189,7 @@ export class ServiceProxyModule {
         ServiceProxyModule.TRANSACTION_SERVICE_PROXY,
         ServiceProxyModule.ENTERPRISE_SERVICE_PROXY,
         ServiceProxyModule.EACCOUNT_SERVICE_PROXY,
+        ServiceProxyModule.SALARY_PROJECT_SERVICE_PROXY,
       ],
     };
   }

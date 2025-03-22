@@ -47,4 +47,11 @@ export class UserRepository implements IUserRepository {
   async delete(id: number): Promise<void> {
     await this.userRepo.delete(id);
   }
+
+  async findAllInactive(): Promise<User[]> {
+    const users = await this.userRepo.find({
+      where: { isActive: false },
+    });
+    return users.map(UserMapper.toDomain);
+  }
 }

@@ -20,6 +20,6 @@ export class BankModel {
   @OneToMany(() => AccountModel, (account) => account.bank)
   accounts!: AccountModel[];
 
-  @OneToOne(() => EnterpriseModel, (enterprise) => enterprise.bank)
-  public enterprise!: EnterpriseModel;
+  @OneToOne(() => EnterpriseModel, (enterprise) => enterprise.bank, { nullable: true })
+  enterprise!: EnterpriseModel;
 }

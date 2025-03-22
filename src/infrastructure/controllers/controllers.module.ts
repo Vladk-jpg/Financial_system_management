@@ -8,6 +8,7 @@ import { AccountController } from './account.controller';
 import { TransactionController } from './transaction.controller';
 import { EnterpriseController } from './enterprise.controller';
 import { EAccountController } from './e-account.controller';
+import { SalaryProjectController } from './salary-project.controller';
 
 @Module({
   imports: [ServiceProxyModule.register()],
@@ -20,6 +21,7 @@ import { EAccountController } from './e-account.controller';
     TransactionController,
     EnterpriseController,
     EAccountController,
+    SalaryProjectController,
   ],
 })
 export class ControllersModule {}

@@ -2,11 +2,14 @@ import { IBankRepository } from 'src/domain/repositories/bank.repository';
 import { IEnterpriseRepository } from 'src/domain/repositories/enterprise.repository';
 import { createEnterpriseDTO } from '../dto/create-enterprise.dto';
 import { Enterprise } from 'src/domain/entities/enterprise';
+import { IUserRepository } from 'src/domain/repositories/user.repository';
+import { UserRole } from 'src/domain/entities/user';
 
 export class EnterpriseService {
   constructor(
     private readonly enterpriseRepo: IEnterpriseRepository,
     private readonly bankRepo: IBankRepository,
+    private readonly userRepo: IUserRepository,
   ) {}
 
   async createEnterprise(
@@ -29,6 +32,14 @@ export class EnterpriseService {
       enterprise,
       dto.isBank,
     );
+    if (!savedEnterprise) return null;
+
+    const user = await this.userRepo.findById(userId);
+    if(user) {
+      user.role = UserRole.ENTERPRISE_SPECIALIST;
+      const updatedUser = await this.userRepo.update(user);
+      if (!updatedUser) return null;
+    }
     return savedEnterprise;
   }
 

@@ -13,16 +13,27 @@ import { ServiceProxy } from 'src/infrastructure/service-proxy/service-proxy';
 import { loginDTO } from 'src/application/dto/login.dto';
 import { FastifyReply } from 'fastify';
 import { AuthGuard } from '@nestjs/passport';
+import { UserService } from 'src/application/services/user.service';
+import { CreateUserDTO } from 'src/application/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
   private readonly authService: AuthService;
+  private readonly userService: UserService;
 
   constructor(
     @Inject(ServiceProxyModule.AUTH_SERVICE_PROXY)
-    private readonly userServiceProxy: ServiceProxy<AuthService>,
+    private readonly authServiceProxy: ServiceProxy<AuthService>,
+    @Inject(ServiceProxyModule.USER_SERVICE_PROXY)
+    private readonly userServiceProxy: ServiceProxy<UserService>,
   ) {
-    this.authService = this.userServiceProxy.getInstance();
+    this.authService = this.authServiceProxy.getInstance();
+    this.userService = this.userServiceProxy.getInstance();
+  }
+
+  @Post('register')
+  async createUser(@Body() dto: CreateUserDTO) {
+    return await this.userService.createUser(dto);
   }
 
   @Post('login')
@@ -46,8 +57,8 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'))
   async logout(@Res({ passthrough: true }) response: FastifyReply) {
     response.clearCookie('accessToken', {
-        path: '/', 
-      });
+      path: '/',
+    });
     return 'Logout successful';
   }
 }
