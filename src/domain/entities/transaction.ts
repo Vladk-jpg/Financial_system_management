@@ -3,6 +3,7 @@ import { OperationState } from '../enums/operation-state.enum';
 export enum ParticipantType {
   ACCOUNT = 'ACCOUNT',
   ENTERPRISE = 'ENTERPRISE',
+  LOAN = 'LOAN',
 }
 
 export class Transaction {

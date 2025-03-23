@@ -16,6 +16,8 @@ import { EAccountRepository } from './repositories/e-account.repository.impl';
 import { SalaryProjectModel } from './models/salary-project.model';
 import { EmployeeModel } from './models/employee.model';
 import { SalaryProjectRepository } from './repositories/salary-project.repository.impl';
+import { LoanModel } from './models/loan.model';
+import { LoanRepository } from './repositories/loan.repository.impl';
 
 @Global()
 @Module({
@@ -32,6 +34,7 @@ import { SalaryProjectRepository } from './repositories/salary-project.repositor
         EAccountModel,
         SalaryProjectModel,
         EmployeeModel,
+        LoanModel,
       ],
       synchronize: true,
     }),
@@ -44,6 +47,7 @@ import { SalaryProjectRepository } from './repositories/salary-project.repositor
       EAccountModel,
       SalaryProjectModel,
       EmployeeModel,
+      LoanModel,
     ]),
   ],
   providers: [
@@ -55,6 +59,7 @@ import { SalaryProjectRepository } from './repositories/salary-project.repositor
     EnterpriseRepository,
     EAccountRepository,
     SalaryProjectRepository,
+    LoanRepository,
   ],
   exports: [
     TypeOrmModule,
@@ -66,6 +71,7 @@ import { SalaryProjectRepository } from './repositories/salary-project.repositor
     EnterpriseRepository,
     EAccountRepository,
     SalaryProjectRepository,
+    LoanRepository,
   ],
 })
 export class DatabaseModule {}
