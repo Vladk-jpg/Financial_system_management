@@ -61,7 +61,6 @@ export class TransactionController {
     @Body('IBAN') iban: string,
     @Param('enterId') enterId: number,
   ) {
-    console.log(iban);
     await this.transactionService.sendSalary(enterId, iban);
   }
 }

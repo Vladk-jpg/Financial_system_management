@@ -53,6 +53,7 @@ export class SalaryProjectRepository implements ISalaryProjectRepository {
     });
     if (!salaryProject) return null;
     salaryProject.name = project.name;
+    salaryProject.isActive = project.isActive;
     await this.sProjectRepo.update(salaryProject.id, salaryProject);
     return project;
   }

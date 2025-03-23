@@ -5,6 +5,7 @@ import {
   Get,
   Inject,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -73,5 +74,11 @@ export class SalaryProjectController {
   async getAllEmployees(@Param('projectId') id: number) {
     const employees = await this.salaryProjectService.getAllEmployees(id);
     return employees;
+  }
+
+  @Patch('salary/activate/:id')
+  async activateSalaryProject(@Param('id') id: number) {
+    await this.salaryProjectService.activateSalaryProject(id);
+    return { message: 'Salary project successfuly ativated' };
   }
 }

@@ -58,6 +58,10 @@ export class SalaryProjectService {
     projectId: number,
     dto: CreateEmployeeDTO,
   ): Promise<Employee | null> {
+    const salaryProject = await this.sProjectRepo.findById(projectId);
+    if (!salaryProject || !salaryProject.isActive) {
+      this.exception.NotFoundException({ message: 'Salary project not found' });
+    }
     const employee = new Employee(dto.IBAN, dto.salary, dto.position);
     const created = this.sProjectRepo.createEmployee(projectId, employee);
     if (!created) {
@@ -71,7 +75,7 @@ export class SalaryProjectService {
 
   async deleteEmployee(projectId: number, employeeId: number): Promise<void> {
     const project = await this.sProjectRepo.findById(projectId);
-    if (!project) {
+    if (!project || !project.isActive) {
       this.exception.NotFoundException({ message: 'Salary project not found' });
     }
     const employees = await this.sProjectRepo.findAllEmployees(projectId);
@@ -89,9 +93,19 @@ export class SalaryProjectService {
 
   async getAllEmployees(projectId: number): Promise<Employee[]> {
     const project = await this.sProjectRepo.findById(projectId);
-    if (!project) {
+    if (!project || !project.isActive) {
       this.exception.NotFoundException({ message: 'Salary project not found' });
     }
     return await this.sProjectRepo.findAllEmployees(projectId);
+  }
+
+  async activateSalaryProject(projectId: number): Promise<void> {
+    const project = await this.sProjectRepo.findById(projectId);
+    if (!project) {
+      this.exception.NotFoundException({ message: 'Salary project not found' });
+      throw new Error();
+    }
+    project.isActive = true;
+    await this.sProjectRepo.update(project);
   }
 }

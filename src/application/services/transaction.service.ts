@@ -178,7 +178,7 @@ export class TransactionService {
     const salaryProject =
       await this.sProjectRepo.findByEnterpriseId(enterpriseId);
 
-    if (!salaryProject) {
+    if (!salaryProject || !salaryProject.isActive) {
       this.exception.NotFoundException({
         message: 'Enterprise does not have salary project',
       });
