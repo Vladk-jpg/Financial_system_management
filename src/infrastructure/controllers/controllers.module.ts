@@ -10,6 +10,7 @@ import { EnterpriseController } from './enterprise.controller';
 import { EAccountController } from './e-account.controller';
 import { SalaryProjectController } from './salary-project.controller';
 import { LoanController } from './loan.controller';
+import { AdminController } from './admin.controller';
 
 @Module({
   imports: [ServiceProxyModule.register()],
@@ -24,6 +25,7 @@ import { LoanController } from './loan.controller';
     EAccountController,
     SalaryProjectController,
     LoanController,
+    AdminController,
   ],
 })
 export class ControllersModule {}

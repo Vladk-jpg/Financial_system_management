@@ -35,6 +35,7 @@ import { SalaryProjectRepository } from '../database/repositories/salary-project
 import { SalaryProjectService } from 'src/application/services/salary-project.service';
 import { LoanRepository } from '../database/repositories/loan.repository.impl';
 import { LoanService } from 'src/application/services/loan.service';
+import { GetLogsUseCase } from 'src/application/use-cases/get-logs.use-case';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ export class ServiceProxyModule {
   static EACCOUNT_SERVICE_PROXY = 'eaccountSerivceProxy';
   static SALARY_PROJECT_SERVICE_PROXY = 'salaryProjectProxy';
   static LOAN_SERVICE_PROXY = 'loanServiceProxy';
+  static GET_LOGS_USECASE_PROXY = 'getLogsUseCaseProxy';
 
   static register(): DynamicModule {
     return {
@@ -199,6 +201,12 @@ export class ServiceProxyModule {
             uow: UnitOfWorkService,
           ) => new ServiceProxy(new LoanService(repo1, repo2, repo3, exc, uow)),
         },
+        {
+          inject: [ExceptionsService],
+          provide: ServiceProxyModule.GET_LOGS_USECASE_PROXY,
+          useFactory: (exc: ExceptionsService) =>
+            new ServiceProxy(new GetLogsUseCase(exc)),
+        },
       ],
       exports: [
         ServiceProxyModule.BANK_SERVICE_PROXY,
@@ -211,6 +219,7 @@ export class ServiceProxyModule {
         ServiceProxyModule.EACCOUNT_SERVICE_PROXY,
         ServiceProxyModule.SALARY_PROJECT_SERVICE_PROXY,
         ServiceProxyModule.LOAN_SERVICE_PROXY,
+        ServiceProxyModule.GET_LOGS_USECASE_PROXY,
       ],
     };
   }
