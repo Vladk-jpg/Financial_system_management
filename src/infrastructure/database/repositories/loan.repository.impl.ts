@@ -15,6 +15,14 @@ export class LoanRepository implements ILoanRepository {
     private readonly bankRepo: Repository<BankModel>,
   ) {}
 
+  async getAllPending(): Promise<Loan[]> {
+    const loans = await this.loanRepo.find({
+      where: { status: LoanSatus.PENDING },
+      relations: ['bank'],
+    });
+    return loans.map(LoanMapper.toDomain);
+  }
+
   async create(loan: Loan): Promise<Loan> {
     const loanModel = LoanMapper.toModel(loan);
     const bank = await this.bankRepo.findOne({ where: { id: loan.bankId } });

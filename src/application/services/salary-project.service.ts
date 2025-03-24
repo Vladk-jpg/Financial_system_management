@@ -109,4 +109,9 @@ export class SalaryProjectService implements ISalaryProjectService {
     project.isActive = true;
     await this.sProjectRepo.update(project);
   }
+
+  async getAllInactiveProjects(): Promise<SalaryProject[]> {
+    const projects = await this.sProjectRepo.findAllInactive();
+    return projects;
+  }
 }

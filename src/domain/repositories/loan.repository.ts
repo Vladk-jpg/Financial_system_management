@@ -8,4 +8,5 @@ export interface ILoanRepository {
   update(loan: Loan): Promise<Loan>;
   delete(id: number): Promise<void>;
   repay(id: number, amount: number, manager: any): Promise<Boolean>;
+  getAllPending(): Promise<Loan[]>;
 }

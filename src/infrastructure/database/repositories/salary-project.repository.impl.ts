@@ -99,4 +99,11 @@ export class SalaryProjectRepository implements ISalaryProjectRepository {
     const empl = await this.employeeRepo.findOne({ where: { id: id } });
     return empl ? EmployeeMapper.toDomain(empl) : null;
   }
+
+  async findAllInactive(): Promise<SalaryProject[]> {
+    const projects = await this.sProjectRepo.find({
+      where: { isActive: false },
+    });
+    return projects.map(SalaryProjectMapper.toDomain);
+  }
 }

@@ -10,4 +10,5 @@ export interface ILoanService {
   getLoansByBankId(id: number): Promise<Loan[]>;
   repayLoan(id: number, amount: number): Promise<void>;
   deleteLoan(id: number): Promise<void>;
+  getAllPendingLoans(): Promise<Loan[]>;
 }

@@ -18,6 +18,11 @@ export class LoanService implements ILoanService {
     private readonly unitOfWork: IUnitOfWork,
   ) {}
 
+  async getAllPendingLoans(): Promise<Loan[]> {
+    const loans = await this.loanRepo.getAllPending();
+    return loans;
+  }
+
   async createLoan(dto: CreateLoanDTO): Promise<Loan | null> {
     const type =
       dto.accountIBAN[18] == 'U'

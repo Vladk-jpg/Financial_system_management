@@ -90,4 +90,11 @@ export class SalaryProjectController {
     await this.salaryProjectService.activateSalaryProject(id);
     return { message: 'Salary project successfuly ativated' };
   }
+
+  @Roles(UserRole.OPERATOR)
+  @Get('inactive')
+  async getAllInactiveProjects() {
+    const projects = await this.salaryProjectService.getAllInactiveProjects();
+    return projects;
+  }
 }

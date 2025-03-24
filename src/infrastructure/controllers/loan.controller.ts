@@ -76,4 +76,11 @@ export class LoanController {
     await this.loanService.repayLoan(id, amount);
     return { message: 'Loan successfuly repayed' };
   }
+
+  @Roles(UserRole.MANAGER)
+  @Get('pending')
+  async getAllPendingLoans() {
+    const loans = await this.loanService.getAllPendingLoans();
+    return loans;
+  }
 }
