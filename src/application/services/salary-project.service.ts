@@ -5,8 +5,9 @@ import { ISalaryProjectRepository } from 'src/domain/repositories/salary-project
 import { CreateEmployeeDTO } from '../dto/create-employee.dto';
 import { Employee } from 'src/domain/entities/employee';
 import { CreateSalaryProjectDTO } from '../dto/create-salary-project.dto';
+import { ISalaryProjectService } from '../interfaces/salary-project.interface';
 
-export class SalaryProjectService {
+export class SalaryProjectService implements ISalaryProjectService {
   constructor(
     private readonly sProjectRepo: ISalaryProjectRepository,
     private readonly enterpriseRepo: IEnterpriseRepository,

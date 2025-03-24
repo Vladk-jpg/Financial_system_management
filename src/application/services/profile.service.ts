@@ -3,8 +3,9 @@ import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { ProfileMapper } from '../mappers/profile.mapper';
 import { UpdateProfileDTO } from '../dto/update-profile.dto';
 import { User } from 'src/domain/entities/user';
+import { IProfileService } from '../interfaces/profile.interface';
 
-export class ProfileService {
+export class ProfileService implements IProfileService {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async getProfile(id: number): Promise<Profile | null> {

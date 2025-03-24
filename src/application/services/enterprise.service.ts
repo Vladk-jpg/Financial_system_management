@@ -4,8 +4,9 @@ import { createEnterpriseDTO } from '../dto/create-enterprise.dto';
 import { Enterprise } from 'src/domain/entities/enterprise';
 import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { UserRole } from 'src/domain/entities/user';
+import { IEnterpriseService } from '../interfaces/enterprise.interface';
 
-export class EnterpriseService {
+export class EnterpriseService implements IEnterpriseService {
   constructor(
     private readonly enterpriseRepo: IEnterpriseRepository,
     private readonly bankRepo: IBankRepository,
@@ -35,7 +36,7 @@ export class EnterpriseService {
     if (!savedEnterprise) return null;
 
     const user = await this.userRepo.findById(userId);
-    if(user) {
+    if (user) {
       user.role = UserRole.ENTERPRISE_SPECIALIST;
       const updatedUser = await this.userRepo.update(user);
       if (!updatedUser) return null;

@@ -17,6 +17,8 @@ import { ServiceProxyModule } from '../service-proxy/service-proxy.module';
 import { EnterpriseService } from 'src/application/services/enterprise.service';
 import { ServiceProxy } from '../service-proxy/service-proxy';
 import { createEnterpriseDTO } from 'src/application/dto/create-enterprise.dto';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from 'src/domain/entities/user';
 
 @Controller('enterprise')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -35,7 +37,7 @@ export class EnterpriseController {
     @Body() dto: createEnterpriseDTO,
     @Request() req: any,
   ) {
-    //dto.isBank = false;
+    dto.isBank = false;
     const enterprise = await this.enterService.createEnterprise(
       dto,
       req.user.id,
@@ -43,24 +45,41 @@ export class EnterpriseController {
     return enterprise;
   }
 
+  @Roles(UserRole.ADMIN)
+  @Post('admin/create')
+  async createEnterpriseAdmin(
+    @Body() dto: createEnterpriseDTO,
+    @Request() req: any,
+  ) {
+    const enterprise = await this.enterService.createEnterprise(
+      dto,
+      req.user.id,
+    );
+    return enterprise;
+  }
+
+  @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
   @Get(':id')
   async getEnterpriseById(@Param('id') id: number) {
     const enterprise = await this.enterService.getById(id);
     return enterprise;
   }
 
+  @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
   @Get('user')
   async getEnterprisesByUserId(@Request() req: any) {
     const enterprises = await this.enterService.getAllByUserId(req.user.id);
     return enterprises;
   }
 
+  @Roles(UserRole.ADMIN)
   @Get('bic')
   async getEnterprisesByBic(@Query('bic') bic: string) {
     const enterprises = await this.enterService.getAllByBic(bic);
     return enterprises;
   }
 
+  @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
   @Delete(':id')
   async deleteEnterprise(@Param('id') id: number) {
     const enterprise = await this.enterService.getById(id);

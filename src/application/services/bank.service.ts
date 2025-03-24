@@ -3,8 +3,9 @@ import { Bank } from 'src/domain/entities/bank';
 import { CreateBankDTO } from '../dto/create-bank.dto';
 import { UpdateBankDTO } from '../dto/update-bank.dto';
 import { ILogger } from 'src/domain/logger/logger.interface';
+import { IBankService } from '../interfaces/bank.interfase';
 
-export class BankService {
+export class BankService implements IBankService {
   constructor(
     private readonly logger: ILogger,
     private readonly bankRepository: IBankRepository

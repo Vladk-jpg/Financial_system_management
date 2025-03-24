@@ -4,8 +4,9 @@ import { CreateUserDTO } from '../dto/create-user.dto';
 import { User } from 'src/domain/entities/user';
 import { IBcryptService } from 'src/domain/adapters/bcrypt.interfase';
 import { IException } from 'src/domain/interfaces/exceptions.interface';
+import { IUserService } from '../interfaces/user.interface';
 
-export class UserService {
+export class UserService implements IUserService {
   constructor(
     private readonly userRepository: IUserRepository,
     private readonly logger: ILogger,

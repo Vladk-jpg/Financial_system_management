@@ -38,7 +38,7 @@ export class UserController {
     return await this.userService.createUser(dto);
   }
 
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
   @Get(':id')
   async getUserById(@Param('id') id: number) {
     const user = await this.userService.getUserById(id);
@@ -46,6 +46,7 @@ export class UserController {
     return user;
   }
 
+  @Roles(UserRole.ADMIN, UserRole.OPERATOR)
   @Get('by-passport')
   async getUserByPassport(@Query('passportNumber') passportNumber: string) {
     const user = await this.userService.getUserByPassport(passportNumber);
@@ -55,6 +56,7 @@ export class UserController {
     return user;
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async deleteUser(@Param('id') id: number) {
     const user = await this.userService.getUserById(id);
@@ -62,12 +64,14 @@ export class UserController {
     await this.userService.deleteUser(id);
   }
 
+  @Roles(UserRole.MANAGER)
   @Patch('activate/:id')
   async activateuser(@Param('id') id: number) {
     await this.userService.activateUser(id);
     return { message: 'User successfuly activated!' };
   }
 
+  @Roles(UserRole.MANAGER)
   @Get('inactive')
   async getAllInactiveUsers() {
     return await this.userService.getAllInactiveUsers();

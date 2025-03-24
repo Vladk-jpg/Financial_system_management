@@ -15,6 +15,8 @@ import { ServiceProxyModule } from '../service-proxy/service-proxy.module';
 import { ServiceProxy } from '../service-proxy/service-proxy';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from 'src/domain/entities/user';
 
 @Controller('account')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -38,6 +40,7 @@ export class AccountController {
     return account;
   }
 
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OPERATOR)
   @Get(':id')
   async getAccountById(@Param('id') id: number) {
     const account = await this.accountService.findById(id);
@@ -50,7 +53,8 @@ export class AccountController {
     const accounts = await this.accountService.findAllByUserId(req.user.id);
     return accounts;
   }
-
+  
+  @Roles(UserRole.MANAGER)
   @Patch('freeze/:id')
   async freezeAccount(@Param('id') id: number) {
     const account = await this.accountService.freezeAccount(id);
@@ -58,6 +62,7 @@ export class AccountController {
     return account;
   }
 
+  @Roles(UserRole.MANAGER)
   @Patch('block/:id')
   async blockAccount(@Param('id') id: number) {
     const account = await this.accountService.blockAccount(id);
@@ -65,6 +70,7 @@ export class AccountController {
     return account;
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async deleteAccount(@Param('id') id: number) {
     const account = await this.accountService.findById(id);

@@ -3,8 +3,9 @@ import { IIBANgenerator } from 'src/domain/interfaces/iban-gen.interface';
 import { IBankRepository } from 'src/domain/repositories/bank.repository';
 import { IEAccountRepository } from 'src/domain/repositories/e-account.repository';
 import { IEnterpriseRepository } from 'src/domain/repositories/enterprise.repository';
+import { IEAccountService } from '../interfaces/e-account.interface';
 
-export class EAccountService {
+export class EAccountService implements IEAccountService {
   constructor(
     private readonly eaccountRepository: IEAccountRepository,
     private readonly bankRepository: IBankRepository,

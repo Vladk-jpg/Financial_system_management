@@ -1,8 +1,9 @@
 import { Account } from 'src/domain/entities/account';
 import { IIBANgenerator } from 'src/domain/interfaces/iban-gen.interface';
 import { IAccountRepository } from 'src/domain/repositories/account.repository';
+import { IAccountService } from 'src/application/interfaces/account.interface';
 
-export class AccountService {
+export class AccountService implements IAccountService {
   constructor(
     private readonly accountRepository: IAccountRepository,
     private readonly IBANService: IIBANgenerator,

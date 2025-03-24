@@ -11,8 +11,9 @@ import { IEnterpriseRepository } from 'src/domain/repositories/enterprise.reposi
 import { IException } from 'src/domain/interfaces/exceptions.interface';
 import { EAccount } from 'src/domain/entities/e-account';
 import { ILogger } from 'src/domain/logger/logger.interface';
+import { ITransactionService } from '../interfaces/transaction.interface';
 
-export class TransactionService {
+export class TransactionService implements ITransactionService {
   constructor(
     private readonly unitOfWork: IUnitOfWork,
     private readonly accountRepository: IAccountRepository,

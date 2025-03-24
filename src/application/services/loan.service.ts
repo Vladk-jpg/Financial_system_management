@@ -7,8 +7,9 @@ import { IAccountRepository } from 'src/domain/repositories/account.repository';
 import { IEAccountRepository } from 'src/domain/repositories/e-account.repository';
 import { AccountState } from 'src/domain/entities/account';
 import { IUnitOfWork } from 'src/domain/interfaces/unit-of-work.interface';
+import { ILoanService } from '../interfaces/loan.interface';
 
-export class LoanService {
+export class LoanService implements ILoanService {
   constructor(
     private readonly loanRepo: ILoanRepository,
     private readonly accountRepo: IAccountRepository,

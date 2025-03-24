@@ -4,8 +4,9 @@ import { loginDTO } from '../dto/login.dto';
 import { IUserRepository } from 'src/domain/repositories/user.repository';
 import { IBcryptService } from 'src/domain/adapters/bcrypt.interfase';
 import { IException } from 'src/domain/interfaces/exceptions.interface';
+import { IAuthService } from '../interfaces/auth.interfase';
 
-export class AuthService {
+export class AuthService implements IAuthService {
   constructor(
     private readonly jwtService: IJwtService,
     private readonly userRepository: IUserRepository,

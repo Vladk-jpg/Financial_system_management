@@ -17,6 +17,8 @@ import { LoanService } from 'src/application/services/loan.service';
 import { ServiceProxyModule } from '../service-proxy/service-proxy.module';
 import { ServiceProxy } from '../service-proxy/service-proxy';
 import { CreateLoanDTO } from 'src/application/dto/create-loan.dto';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from 'src/domain/entities/user';
 
 @Controller('loan')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -36,12 +38,14 @@ export class LoanController {
     return loan;
   }
 
+  @Roles(UserRole.MANAGER)
   @Patch('activate/:id')
   async activateLoan(@Param('id') id: number) {
     await this.loanService.activateLoan(id);
     return { message: 'Loan successfuly activated' };
   }
 
+  @Roles(UserRole.MANAGER)
   @Patch('cancel/:id')
   async cancelLoan(@Param('id') id: number) {
     await this.loanService.cancelLoan(id);
@@ -60,6 +64,7 @@ export class LoanController {
     return loans;
   }
 
+  @Roles(UserRole.ADMIN)
   @Get('bank/:id')
   async getLoansByBankId(@Param('id') id: number) {
     const loans = await this.loanService.getLoansByBankId(id);

@@ -14,6 +14,8 @@ import { BankService } from 'src/application/services/bank.service';
 import { UpdateBankDTO } from 'src/application/dto/update-bank.dto';
 import { ServiceProxyModule } from 'src/infrastructure/service-proxy/service-proxy.module';
 import { ServiceProxy } from 'src/infrastructure/service-proxy/service-proxy';
+import { Roles } from '../common/decorators/roles.decorator';
+import { UserRole } from 'src/domain/entities/user';
 
 @Controller('banks')
 export class BankController {
@@ -26,6 +28,7 @@ export class BankController {
     this.bankService = bankServiceProxy.getInstance();
   }
 
+  @Roles(UserRole.ADMIN)
   @Post()
   async createBank(@Body() dto: CreateBankDTO) {
     return await this.bankService.createBank(dto);
@@ -43,6 +46,7 @@ export class BankController {
     return await this.bankService.getAllBanks();
   }
 
+  @Roles(UserRole.ADMIN)
   @Put(':id')
   async editBank(@Param('id') id: number, @Body() dto: UpdateBankDTO) {
     const bank = await this.bankService.updateBank(id, dto);
@@ -50,6 +54,7 @@ export class BankController {
     return bank;
   }
 
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async deleteBank(@Param('id') id: number) {
     const bank = this.bankService.getBankById(id);
