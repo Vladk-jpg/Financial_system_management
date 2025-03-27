@@ -8,6 +8,6 @@ export interface IAccountRepository {
   freeze(id: number): Promise<Account | null>;
   delete(id: number): Promise<void>;
   block(id: number): Promise<Account | null>;
-  deposit(id: number, amount: number, manager: any): Promise<void>;
-  withdraw(id: number, amount: number, manager: any): Promise<boolean>;
+  deposit(id: number, amount: number, manager?: any): Promise<void>;
+  withdraw(id: number, amount: number, manager?: any): Promise<boolean>;
 }

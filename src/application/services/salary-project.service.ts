@@ -55,6 +55,10 @@ export class SalaryProjectService implements ISalaryProjectService {
     return await this.sProjectRepo.findByEnterpriseId(id);
   }
 
+  async findById(id: number): Promise<SalaryProject | null> {
+    return await this.sProjectRepo.findById(id);
+  }
+
   async createEmployee(
     projectId: number,
     dto: CreateEmployeeDTO,

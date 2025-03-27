@@ -97,13 +97,17 @@ export class EAccountRepository implements IEAccountRepository {
     return updatedEAccount;
   }
 
-  async deposit(id: number, amount: number, manager: any): Promise<void> {
-    const repo = manager.getRepository(EAccountModel);
+  async deposit(id: number, amount: number, manager?: any): Promise<void> {
+    const repo = manager
+      ? manager.getRepository(EAccountModel)
+      : this.eaccountRepo;
     await repo.increment({ id }, 'balance', amount);
   }
 
-  async withdraw(id: number, amount: number, manager: any): Promise<boolean> {
-    const repo = manager.getRepository(EAccountModel);
+  async withdraw(id: number, amount: number, manager?: any): Promise<boolean> {
+    const repo = manager
+      ? manager.getRepository(EAccountModel)
+      : this.eaccountRepo;
     const eaccount = await this.findById(id, manager);
     if (!eaccount) {
       return false;

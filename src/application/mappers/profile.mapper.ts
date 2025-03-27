@@ -10,6 +10,7 @@ export class ProfileMapper {
       user.phone,
       user.email,
     );
+    profile.role = user.role;
     return profile;
   }
 }

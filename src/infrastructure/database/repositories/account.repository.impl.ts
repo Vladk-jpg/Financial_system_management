@@ -96,9 +96,11 @@ export class AccountRepository implements IAccountRepository {
   async withdraw(
     id: number,
     amount: number,
-    manager: EntityManager,
+    manager?: EntityManager,
   ): Promise<boolean> {
-    const repo = manager.getRepository(AccountModel);
+    const repo = manager
+      ? manager.getRepository(AccountModel)
+      : this.accountRepo;
     const account = await this.findById(id, manager);
     if (!account) {
       return false;
@@ -110,9 +112,11 @@ export class AccountRepository implements IAccountRepository {
   async deposit(
     id: number,
     amount: number,
-    manager: EntityManager,
+    manager?: EntityManager,
   ): Promise<void> {
-    const repo = manager.getRepository(AccountModel);
+    const repo = manager
+      ? manager.getRepository(AccountModel)
+      : this.accountRepo;
     await repo.increment({ id }, 'balance', amount);
   }
 }

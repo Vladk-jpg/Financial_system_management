@@ -32,6 +32,7 @@ export class EnterpriseController {
     this.enterService = enterServiceProxy.getInstance();
   }
 
+  @Roles(UserRole.ADMIN, UserRole.CLIENT, UserRole.ENTERPRISE_SPECIALIST)
   @Post('create')
   async createEnterprise(
     @Body() dto: createEnterpriseDTO,
@@ -83,7 +84,8 @@ export class EnterpriseController {
   @Delete(':id')
   async deleteEnterprise(@Param('id') id: number) {
     const enterprise = await this.enterService.getById(id);
-    if (!enterprise) throw new NotFoundException('Enterprise with such id not found');
+    if (!enterprise)
+      throw new NotFoundException('Enterprise with such id not found');
+    await this.enterService.deleteEnterprise(id);
   }
-
 }

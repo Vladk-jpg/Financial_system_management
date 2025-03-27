@@ -10,6 +10,7 @@ export interface ISalaryProjectService {
   ): Promise<SalaryProject | null>;
   deleteSalaryProject(id: number): Promise<void>;
   updateSalaryProject(project: SalaryProject): Promise<SalaryProject | null>;
+  findById(id: number): Promise<SalaryProject | null>;
   findByEnterpriseId(id: number): Promise<SalaryProject | null>;
   createEmployee(
     projectId: number,

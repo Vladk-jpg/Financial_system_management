@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   Post,
   Res,
@@ -60,5 +61,11 @@ export class AuthController {
       path: '/',
     });
     return 'Logout successful';
+  }
+
+  @Get('check')
+  @UseGuards(AuthGuard('jwt'))
+  async checkLogin() {
+    return 'OK';
   }
 }

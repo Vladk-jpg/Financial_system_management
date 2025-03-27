@@ -78,6 +78,13 @@ export class SalaryProjectController {
   }
 
   @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
+  @Get('salary/by-id/:id')
+  async getSalaryProjectById(@Param('id') id: number) {
+    const salary = await this.salaryProjectService.findById(id);
+    return salary;
+  }
+
+  @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
   @Get('employees/:projectId')
   async getAllEmployees(@Param('projectId') id: number) {
     const employees = await this.salaryProjectService.getAllEmployees(id);
