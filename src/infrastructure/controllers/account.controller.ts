@@ -40,7 +40,6 @@ export class AccountController {
     return account;
   }
 
-  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.OPERATOR)
   @Get(':id')
   async getAccountById(@Param('id') id: number) {
     const account = await this.accountService.findById(id);
@@ -62,7 +61,6 @@ export class AccountController {
     return account;
   }
 
-  @Roles(UserRole.MANAGER)
   @Patch('block/:id')
   async blockAccount(@Param('id') id: number) {
     const account = await this.accountService.blockAccount(id);

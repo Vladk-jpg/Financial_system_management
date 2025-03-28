@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ParticipantType, Transaction } from 'src/domain/entities/transaction';
 import { ITransactionRepository } from 'src/domain/repositories/transaction.repository';
 import { TransactionModel } from '../models/transaction.model';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { TransactionMapper } from '../mappers/transaction.mapper';
 import { OperationState } from 'src/domain/enums/operation-state.enum';
 
@@ -28,11 +28,14 @@ export class TransactionRepository implements ITransactionRepository {
     return TransactionMapper.toDomain(transaction);
   }
 
-  async getTransactionsByAccountId(id: number): Promise<Transaction[]> {
+  async getTransactionsByAccountId(
+    id: number,
+    type: ParticipantType,
+  ): Promise<Transaction[]> {
     const transactions = await this.transactionRepo.find({
       where: [
-        { senderId: id, senderType: ParticipantType.ACCOUNT },
-        { recipientId: id, recipientType: ParticipantType.ACCOUNT },
+        { senderId: id, senderType: type },
+        { recipientId: id, recipientType: type },
       ],
     });
     return transactions.map(TransactionMapper.toDomain);
@@ -47,5 +50,15 @@ export class TransactionRepository implements ITransactionRepository {
     transaction.createdAt;
     await this.transactionRepo.update(id, transaction);
     return TransactionMapper.toDomain(transaction);
+  }
+
+  async getLatestTransactions(): Promise<Transaction[]> {
+    const past24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const transactions = await this.transactionRepo.find({
+      where: {
+        createdAt: MoreThan(past24Hours),
+      },
+    });
+    return transactions;
   }
 }

@@ -60,6 +60,12 @@ export class TransactionController {
     return transactions;
   }
 
+  @Roles(UserRole.OPERATOR, UserRole.ADMIN, UserRole.MANAGER)
+  @Get('latest')
+  async getLatestTransactions() {
+    return await this.transactionService.getLatestTransactions();
+  }
+
   @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
   @Post('salary/:enterId')
   async sendSalary(

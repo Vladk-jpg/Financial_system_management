@@ -152,13 +152,20 @@ export class TransactionService implements ITransactionService {
   async getTransactionsByAccountIBAN(iban: string): Promise<Transaction[]> {
     const repo =
       iban[18] == 'U' ? this.accountRepository : this.eaccountRepository;
+    const type =
+      iban[18] == 'U' ? ParticipantType.ACCOUNT : ParticipantType.ENTERPRISE;
     const account = await repo.findByIBAN(iban);
     var transactions: Transaction[] = [];
     if (!account) return transactions;
     transactions = await this.transactionRepository.getTransactionsByAccountId(
       account.id,
+      type,
     );
     return transactions;
+  }
+
+  async getLatestTransactions(): Promise<Transaction[]> {
+    return await this.transactionRepository.getLatestTransactions();
   }
 
   async sendSalary(enterpriseId: number, IBAN: string): Promise<void> {

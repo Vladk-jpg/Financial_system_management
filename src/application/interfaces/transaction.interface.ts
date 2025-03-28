@@ -6,5 +6,6 @@ export interface ITransactionService {
   getTransactionById(id: number): Promise<Transaction | null>;
   cancelTransaction(id: number): Promise<Transaction | null>;
   getTransactionsByAccountIBAN(iban: string): Promise<Transaction[]>;
+  getLatestTransactions(): Promise<Transaction[]>;
   sendSalary(enterpriseId: number, IBAN: string): Promise<void>;
 }

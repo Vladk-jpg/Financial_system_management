@@ -45,7 +45,7 @@ export class SalaryProjectController {
     return salaryProject;
   }
 
-  @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN)
+  @Roles(UserRole.ENTERPRISE_SPECIALIST, UserRole.ADMIN, UserRole.OPERATOR)
   @Delete('salary/:id')
   async deleteSalaryProject(@Param('id') id: number) {
     await this.salaryProjectService.deleteSalaryProject(id);
@@ -91,14 +91,14 @@ export class SalaryProjectController {
     return employees;
   }
 
-  @Roles(UserRole.OPERATOR)
+  @Roles(UserRole.OPERATOR, UserRole.MANAGER)
   @Patch('salary/activate/:id')
   async activateSalaryProject(@Param('id') id: number) {
     await this.salaryProjectService.activateSalaryProject(id);
     return { message: 'Salary project successfuly ativated' };
   }
 
-  @Roles(UserRole.OPERATOR)
+  @Roles(UserRole.OPERATOR, UserRole.MANAGER)
   @Get('inactive')
   async getAllInactiveProjects() {
     const projects = await this.salaryProjectService.getAllInactiveProjects();

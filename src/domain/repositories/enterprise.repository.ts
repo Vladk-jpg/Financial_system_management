@@ -7,4 +7,5 @@ export interface IEnterpriseRepository {
   findAllByUserId(userId: number): Promise<Enterprise[]>;
   update(enterprise: Enterprise): Promise<Enterprise | null>;
   delete(id: number): Promise<void>;
+  findByProjectId(id: number): Promise<Enterprise | null>;
 }

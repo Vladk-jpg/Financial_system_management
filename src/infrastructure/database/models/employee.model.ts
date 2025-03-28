@@ -18,7 +18,7 @@ export class EmployeeModel {
   @ManyToOne(
     () => SalaryProjectModel,
     (salaryProject) => salaryProject.employees,
-    { nullable: true },
+    { nullable: true, onDelete: 'CASCADE'},
   )
   salaryProject!: SalaryProjectModel;
 }

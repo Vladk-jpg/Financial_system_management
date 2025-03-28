@@ -67,7 +67,6 @@ export class EAccountController {
     return eaccount;
   }
 
-  @Roles(UserRole.MANAGER)
   @Patch('block/:id')
   async blockEAccount(@Param('id') id: number) {
     const eaccount = await this.eaccountService.blockEAccount(id);

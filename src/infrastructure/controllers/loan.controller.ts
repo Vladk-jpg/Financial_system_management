@@ -10,6 +10,7 @@ import {
   UseGuards,
   Request,
   NotFoundException,
+  Delete,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -82,5 +83,11 @@ export class LoanController {
   async getAllPendingLoans() {
     const loans = await this.loanService.getAllPendingLoans();
     return loans;
+  }
+
+  @Roles(UserRole.ADMIN)
+  @Delete(':id')
+  async deleteLoan(@Param('id') id: number) {
+    await this.loanService.deleteLoan(id);
   }
 }

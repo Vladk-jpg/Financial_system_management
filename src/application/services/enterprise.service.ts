@@ -36,7 +36,7 @@ export class EnterpriseService implements IEnterpriseService {
     if (!savedEnterprise) return null;
 
     const user = await this.userRepo.findById(userId);
-    if (user) {
+    if (user && user.role != UserRole.ADMIN) {
       user.role = UserRole.ENTERPRISE_SPECIALIST;
       const updatedUser = await this.userRepo.update(user);
       if (!updatedUser) return null;
@@ -61,5 +61,9 @@ export class EnterpriseService implements IEnterpriseService {
 
   async deleteEnterprise(id: number): Promise<void> {
     await this.enterpriseRepo.delete(id);
+  }
+
+  async getByProjectId(id: number): Promise<Enterprise | null> {
+    return await this.enterpriseRepo.findByProjectId(id);
   }
 }

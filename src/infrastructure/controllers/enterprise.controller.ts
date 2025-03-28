@@ -88,4 +88,10 @@ export class EnterpriseController {
       throw new NotFoundException('Enterprise with such id not found');
     await this.enterService.deleteEnterprise(id);
   }
+
+  @Roles(UserRole.OPERATOR)
+  @Get('by-salary-project/:id')
+  async getEnterpriseByProjectId(@Param('id') id: number) {
+    return await this.enterService.getByProjectId(id);
+  }
 }

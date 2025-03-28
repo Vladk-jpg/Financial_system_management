@@ -7,4 +7,5 @@ export interface IEnterpriseService {
   getAllByBic(bic: string): Promise<Enterprise[]>;
   getAllByUserId(id: number): Promise<Enterprise[]>;
   deleteEnterprise(id: number): Promise<void>;
+  getByProjectId(id: number): Promise<Enterprise | null>;
 }

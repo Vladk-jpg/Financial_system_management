@@ -65,4 +65,12 @@ export class EnterpriseRepository implements IEnterpriseRepository {
   async delete(id: number): Promise<void> {
     await this.EnterpiseRepo.delete(id);
   }
+
+  async findByProjectId(id: number): Promise<Enterprise | null> {
+    const enterprise = await this.EnterpiseRepo.findOne({
+      where: { salaryProject: { id: id } },
+      relations: ['salaryProject'],
+    });
+    return enterprise;
+  }
 }
